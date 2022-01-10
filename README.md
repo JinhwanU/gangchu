@@ -4,8 +4,8 @@
 flask
 flask-WTF
 WTForms
+email-validator
 pymongo
 selenium
 bs4
 requests
-
