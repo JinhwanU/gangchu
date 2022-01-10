@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+    <script type="text/javascript" src="../static/js/script.js"></script>
+
+    <title>개발강의 추천 사이트 - 강추</title>
+</head>
+<body>
+<div class="wrapper">
+    <div class="wrapper">
+        <button role="button" onclick="main()">메인페이지
+        </button>
+        <button role="button" onclick="map() ">지도
+        </button>
+        <button role="button" onclick="board()">게시판
+        </button>
+        <button role="button" onclick="mypage()">마이페이지
+        </button>
+<!--        <button role="button" onclick="login()">로그인-->
+<!--        </button>-->
+<!--        <button role="button" onclick="signup()">회원가입-->
+<!--        </button>-->
+    </div>
+
+    {% block content %}
+    {% endblock %}
+</div>
+</body>
+</html>
