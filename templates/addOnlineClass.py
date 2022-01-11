@@ -46,13 +46,13 @@ def addonline(adress):
                 'title': f_tag[:-4],
                 'url': url
             }
-            db.mystar.insert_one(doc)
+            db.classlist.insert_one(doc)
             data = requests.get('https://spartacodingclub.kr/catalog/field/' + adress, headers=headers)
             soup = BeautifulSoup(data.text, 'html.parser')
             cnt1 = cnt1 + 1
 
 
 list = ['web','app','grammar','datascience','game']
-db.mystar.drop()
+db.classlist.drop()
 for x in list:
     addonline(x)

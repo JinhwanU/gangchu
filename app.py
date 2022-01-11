@@ -18,8 +18,8 @@ def home():
 
 @app.route('/readList', methods=['GET'])
 def read_list():
-    class_list = list(db.mystar.find({}, {'_id': False}))
-    return jsonify({'result': 'success', 'stars_list': class_list})
+    class_list = list(db.classlist.find({}, {'_id': False}))
+    return jsonify({'result': 'success', 'class_list': class_list})
 
 
 @app.route('/map')
