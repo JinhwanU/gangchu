@@ -7,9 +7,56 @@
             </script>
         {% endif %}
     {% endwith %}
+<style>
+        .cat {
+            height: 150px;
+            width: 150px;
+        }
+    </style>
+    <script>
 
+        $(document).ready(function () {
+            // index.html 로드가 완료되면 자동으로 showStar() 함수를 호출합니다.
+            showStar();
+        });
+
+        function showStar() {
+            $.ajax({
+                type: 'GET',
+                url: '/readList',
+                data: {},
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        let starslist = response['stars_list']
+                        $('#star-box').empty()
+                        for (let i = 0; i < starslist.length; i++) {
+                            let star = starslist[i]
+                            let temphtml = `<div class="row g-0">
+    <div class="col-md-4">
+      <img src="${star['img_url']}" class="img-fluid rounded-start cat" alt="...">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <a href="${star['url']}" class="card-title">${star['title']}</a>
+        <p class="card-text">${star['text']}</p>
+        <p class="card-text"><small class="text-muted">평점</small></p>
+        <a href="/board?title=${star['title']}">리뷰보러가기</a>
+        <br>
+      </div>
+    </div>
+  </div>`
+                            $('#star-box').append(temphtml)
+                        }
+                    }
+                }
+            });
+        }
+
+    </script>
 
     <h1> 메인페이지</h1>
-    <p>여기에 코드 작성</p>
+   <div class="card mb-3" style="max-width: 540px;" id="star-box">
+
+</div>
 
 {% endblock %}

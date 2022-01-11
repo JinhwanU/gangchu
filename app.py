@@ -16,6 +16,11 @@ db = client.gangchu
 def home():
     return render_template('main.html')
 
+@app.route('/readList', methods=['GET'])
+def read_list():
+    class_list = list(db.mystar.find({}, {'_id': False}))
+    return jsonify({'result': 'success', 'stars_list': class_list})
+
 
 @app.route('/map')
 def route_map():
@@ -24,7 +29,24 @@ def route_map():
 
 @app.route('/board')
 def route_board():
-    return render_template('board.html')
+    title_receive = request.args.get('title')
+    review_list = list(db.review.find({'title': title_receive}, {'_id': False}))
+    return render_template('board.html', review_list=review_list, title=title_receive)
+
+@app.route('/writeBoard', methods=['POST'])
+def write_review():
+    # 1. 클라이언트로부터 데이터를 받기
+    id_receive = request.form["id_give"]
+    rating_receive = request.form["rating_give"]
+    review_receive = request.form["review_give"]
+    title_receive = request.form["title_give"]
+    doc = {
+        'id': id_receive, 'rating': rating_receive,
+        'title': title_receive, 'review': review_receive,
+    }
+    db.review.insert_one(doc)
+
+    return jsonify({'result': 'success'})
 
 
 @app.route('/mypage')
