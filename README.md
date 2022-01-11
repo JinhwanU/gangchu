@@ -22,6 +22,8 @@
    - flask-WTF
    - WTForms
    - email-validator
+   - requests
+   - beautifulsoup4
 - `Frontend`
    - jinja
    - bulma
