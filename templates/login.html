@@ -43,34 +43,47 @@
     {#        </div>#}
     {#    {% endfor %}#}
 
-    {% for error in form.userID.errors %}
-        <div class="alert alert-danger" role="alert">
-            <strong>{{ error }}</strong>
-        </div>
-    {% endfor %}
-
-
+    {# 회원가입 에러 #}
     {% if login_form == 'signup' %}
+        {% for error in form.userID.errors %}
+            <div class="alert alert-danger" role="alert">
+                <strong>{{ error }}</strong>
+            </div>
+        {% endfor %}
         {% for error in form.email.errors %}
             <div class="alert alert-danger" role="alert">
                 <strong>{{ error }}</strong>
             </div>
         {% endfor %}
-    {% endif %}
-
-    {% for error in form.password.errors %}
-        <div class="alert alert-danger" role="alert">
-            <strong>{{ error }}</strong>
-        </div>
-    {% endfor %}
-
-    {% if login_form == 'signup' %}
+        {% for error in form.password.errors %}
+            <div class="alert alert-danger" role="alert">
+                <strong>{{ error }}</strong>
+            </div>
+        {% endfor %}
         {% for error in form.confirm_password.errors %}
             <div class="alert alert-danger" role="alert">
                 <strong>{{ error }}</strong>
             </div>
         {% endfor %}
+        <form style="width: 400px" action="/login/signup" method="post">
+
+
+
+        {# 로그인 에러#}
+    {% else %}
+        {% for error in form.userID.errors %}
+            <div class="alert alert-danger" role="alert">
+                <strong>{{ error }}</strong>
+            </div>
+        {% endfor %}
+        {% for error in form.password.errors %}
+            <div class="alert alert-danger" role="alert">
+                <strong>{{ error }}</strong>
+            </div>
+        {% endfor %}
+        <form style="width: 400px" action="/login" method="post">
     {% endif %}
+
 
     <!-- flash 오류 -->
     {# app.py에서 보낸 flash 메세지를 획득하여 출력 #}
@@ -81,50 +94,58 @@
     {% endfor %}
 
 
-    {% if login_form == 'signup' %}
-        <form style="width: 400px" action="/login/signup" method="post">
-    {% else %}
-        <form style="width: 400px" action="/login" method="post">
-    {% endif %}
+
     {# CSRF로부터 보호하는 데 필요한 작업을 처리 #}
     {{ form.hidden_tag() }}
 
-    <div class="form-group">
-        {{ form.userID.label(class="form-label") }}
-        {{ form.userID(class="form-control") }}
-    </div>
-
+    {# 회원가입 #}
     {% if login_form == 'signup' %}
-        <div class="form-group" id="email-form">
+        <div class="form-group">
+            {{ form.userID.label(class="form-label") }}
+            {{ form.userID(class="form-control") }}
+        </div>
+        <div class="form-group">
             {{ form.email.label(class="form-label") }}
             {{ form.email(class="form-control") }}
         </div>
-    {% endif %}
-
-
-    <div class="form-group">
-        {{ form.password.label(class="form-label") }}
-        {{ form.password(class="form-control") }}
-    </div>
-    {% if login_form=='signup' %}
-        <div class="form-group" id="pwcheck-form">
+        <div class="form-group">
+            {{ form.password.label(class="form-label") }}
+            {{ form.password(class="form-control") }}
+        </div>
+        <div class="form-group">
             {{ form.confirm_password.label(class="form-label") }}
             {{ form.confirm_password(class="form-control") }}
         </div>
-    {% endif %}
-
-    <div class="form-row">
-        <div class="col-6">
-            {% if login_form == 'signup' %}
+        <div class="form-row">
+            <div class="col-6">
                 {{ form.signup_btn(class="btn btn-primary col-12") }}
-            {% else %}
+            </div>
+            <div class="col-6">
+                <button class="btn btn-secondary col-12" onclick=location.href='/'>취소</button>
+            </div>
+        </div>
+
+        {# 로그인 #}
+    {% else %}
+        <div class="form-group">
+            {{ form.userID.label(class="form-label") }}
+            {{ form.userID(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.password.label(class="form-label") }}
+            {{ form.password(class="form-control") }}
+        </div>
+
+        <div class="form-row">
+            <div class="col-6">
                 {{ form.login_btn(class="btn btn-primary col-12") }}
-            {% endif %}
+            </div>
+            <div class="col-6">
+                <button class="btn btn-secondary col-12" onclick=location.href='/'>취소</button>
+            </div>
         </div>
-        <div class="col-6">
-            <button class="btn btn-secondary col-12" onclick=location.href='/'>취소</button>
-        </div>
-    </div>
+        </form>
+    {% endif %}
     </form>
 </div>
 </body>

@@ -1,8 +1,7 @@
 import hashlib
-import re
 
 from flask import Flask, render_template, jsonify, request, flash, redirect, url_for, session
-from forms import LoginForm
+from forms import LoginForm, SignupForm
 
 app = Flask(__name__)
 
@@ -71,8 +70,10 @@ def route_login():
     # POST방식으로 호출한 경우 유효성 검증
     if request.method == 'POST':
         if form.validate() == False:
+            print("hello1")
             return render_template('login.html', form=form)
         else:
+            print("hello2")
             flash(f'{form.userID.data}님 환영합니다')
             return redirect(url_for("home"))
 
@@ -91,11 +92,10 @@ def route_login():
 
 @app.route('/login/<signup>', methods=["GET", "POST"])
 def route_signup(signup):
-    form = LoginForm()
+    form = SignupForm()
     if request.method == 'POST':
         if form.validate() == False:
             return render_template('login.html', form=form, login_form=signup)
-
         else:
             # 중복 검사
             duplic_id = db.users.find_one({'id': form.userID.data}, {'_id': False, 'id': 1})
