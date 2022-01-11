@@ -1,3 +1,6 @@
+import hashlib
+import re
+
 from flask import Flask, render_template, jsonify, request, flash, redirect, url_for, session
 from forms import LoginForm
 
@@ -66,16 +69,12 @@ def route_login():
     form = LoginForm()
 
     # POST방식으로 호출한 경우 유효성 검증
-    # False일 경우 회원가입 페이지로 돌아감
-    # True일 경우 flash메세지 보낸 후 redirect (main.html: 메세지 획득 후 alert 실행)
-    # DB관련 작업 추가 예정
     if request.method == 'POST':
-        if (form.validate() == False):
+        if form.validate() == False:
             return render_template('login.html', form=form)
         else:
-            flash(f'{form.username.data}님 환영합니다')
+            flash(f'{form.userID.data}님 환영합니다')
             return redirect(url_for("home"))
-
 
         # user = User.query.filter_by(username=form.username.data).first()
         # if not user:
@@ -92,14 +91,33 @@ def route_login():
 
 @app.route('/login/<signup>', methods=["GET", "POST"])
 def route_signup(signup):
-    signup_form = LoginForm()
+    form = LoginForm()
     if request.method == 'POST':
-        if (signup_form.validate() == False):
-            return render_template('login.html', form=signup_form, login_form='signup')
+        if form.validate() == False:
+            return render_template('login.html', form=form, login_form=signup)
+
         else:
-            flash(f'{signup_form.username.data}님 환영합니다')
-            return redirect(url_for("home"))
-    return render_template('login.html', form=signup_form, login_form=signup)
+            # 중복 검사
+            duplic_id = db.users.find_one({'id': form.userID.data}, {'_id': False, 'id': 1})
+            duplic_email = db.users.find_one({'email': form.email.data}, {'_id': False, 'email': 1})
+            duplic_check = [duplic_id, duplic_email]
+
+            result = list(filter(None, duplic_check))
+
+            if len(result) > 0:
+                for i in result:
+                    key = list(i.keys())
+                    flash(f'이미 사용된 {key} 입니다.')
+                return render_template('login.html', form=form, login_form=signup)
+            else:
+                password_hash = hashlib.sha256(form.password.data.encode('utf-8')).hexdigest()
+                doc = {
+                    'id': form.userID.data, 'email': form.userID.data, 'password': password_hash
+                }
+                db.users.insert_one(doc)
+                flash(f'{form.userID.data}님 환영합니다. 로그인 후 이용해주세요')
+                return redirect(url_for("home"))
+    return render_template('login.html', form=form, login_form=signup)
 
 
 if __name__ == '__main__':
