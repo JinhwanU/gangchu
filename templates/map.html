@@ -1,27 +1,86 @@
 {% extends 'index.html' %}
 {% block content %}
 
-<h1> 지도</h1>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <title>간단한 지도 표시하기</title>
+    <title></title>
     <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=0a31i2ioet"></script>
 </head>
 <body>
+<h1> 오프라인 학원 찾기 </h1>
+
 <div id="map" style="width:100%;height:400px;"></div>
 
+
+
+
 <script>
-var mapOptions = {
+  // 예시 학원
+  let testAcademy = [
+    { name: "비트교육센터", addr:"서울특별시 서초구 서초대로74길 33", latitude : 37.494868038021544, longitude : 127.02757205682255},
+    { name: "쌍용교육센터  강남", addr:"서울특별시 강남구 테헤란로 132 한독약품빌딩 8층 쌍용교육센터", latitude : 37.49943819276011, longitude : 127.03325444290896},
+    { name: "하이미디어 컴퓨터학원 신촌캠퍼스", addr:"서울특별시 마포구 서강로 144", latitude : 37.554641312684005, longitude : 126.93660122756584},
+  ];
+
+  // 거리 계산 로직
+  function getDistance(lat1, lon1, lat2, lon2, unit) {
+        var radlat1 = Math.PI * lat1/180
+        var radlat2 = Math.PI * lat2/180
+        var radlon1 = Math.PI * lon1/180
+        var radlon2 = Math.PI * lon2/180
+        var theta = lon1-lon2
+        var radtheta = Math.PI * theta/180
+        var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+        dist = Math.acos(dist)
+        dist = dist * 180/Math.PI
+        dist = dist * 60 * 1.1515
+        if (unit=="K") { dist = dist * 1.609344 }
+        if (unit=="N") { dist = dist * 0.8684 }
+        return dist
+}
+  // 네이버 지도 
+  var mapOptions = {
     center: new naver.maps.LatLng(37.3595704, 127.105399),
     zoom: 10
-};
+  };
 
-var map = new naver.maps.Map('map', mapOptions);
+  var map = new naver.maps.Map('map', mapOptions);
+
+    // 사용자 위치 정보
+  navigator.geolocation.getCurrentPosition((position) => {
+    let latitude = position.coords.latitude;
+    let longitude = position.coords.longitude;
+    console.log('사용자 위치' , 'lat :', latitude,'lon :', longitude);
+    // 거리 계산 로직을 distance에 ㄲ K는 유닛 키로미터
+    for (let i=0 ; i < testAcademy.length ; i++) {
+      let distance = getDistance(latitude, longitude, testAcademy[i].latitude, testAcademy[i].longitude, "K");
+      // testAcademy의 distance 키를 만들어줌 
+      testAcademy[i].distance = distance;
+    }
+    // 거리순 정렬을 newTestAcademy에 넣기
+    let newTestAcademy = testAcademy.sort(function (a, b) {
+      if (a.distance > b.distance) {
+        return 1;
+      }
+      if (a.distance < b.distance) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    console.log(newTestAcademy);
+
+  }, (err) => {
+
+  })
+
 </script>
 </body>
 </html>
 {% endblock %}
+
