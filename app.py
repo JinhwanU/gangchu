@@ -76,6 +76,7 @@ def route_login():
             flash(f'{form.username.data}님 환영합니다')
             return redirect(url_for("home"))
 
+
         # user = User.query.filter_by(username=form.username.data).first()
         # if not user:
         #     user = User(username=form.username.data,
