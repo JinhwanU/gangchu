@@ -31,12 +31,16 @@
 
 
     <!-- 필드오류 -->
+    {# form.errors.items()는 app.py의 form.validate()에서 검증한 form data의 에러를 반환한다 #}
+    {# field에는 오류가 발생한 라벨 이름 저장 #}
+    {# errors에는 오류 내용 저장 #}
     {% for field, errors in form.errors.items() %}
         <div class="alert alert-danger" role="alert">
             <strong>{{ form[field].label }}</strong>: {{ ', '.join(errors) }}
         </div>
     {% endfor %}
     <!-- flash 오류 -->
+    {# app.py에서 보낸 flash 메세지를 획득하여 출력 #}
     {% for message in get_flashed_messages() %}
         <div class="alert alert-danger" role="alert">
             {{ message }}
@@ -45,6 +49,7 @@
 
 
     <form style="width: 400px" action="/signup" method="post">
+        {# CSRF로부터 보호하는 데 필요한 작업을 처리 #}
         {{ form.hidden_tag() }}
 
         <div class="form-group">

@@ -1,5 +1,7 @@
 {% extends 'index.html' %}
 {% block content %}
+
+    {# flash 메세지 전달 받으면 alert 띄우기 #}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <script>

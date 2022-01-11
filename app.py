@@ -2,6 +2,10 @@ from flask import Flask, render_template, jsonify, request, flash, redirect, url
 from forms import RegistrationForm
 
 app = Flask(__name__)
+
+# CSRF(Cross-Site Request Forgery) 보호하기 위해 사용
+# WTForms 라이브러리 사용 시 필수적으로 포함되어야 한다
+# secrets import 후 secrets.token_hex(16) 해시함수 사용하여 토큰 생성
 app.config["SECRET_KEY"] = 'd2707fea9778e085491e2dbbc73ff30e'
 
 from pymongo import MongoClient
@@ -56,8 +60,13 @@ def route_mypage():
 
 @app.route('/signup', methods=["GET", "POST"])
 def route_signup():
+    # forms에 선언한 RegistrationForm클래스의 자식 객체 생성
     form = RegistrationForm()
 
+    # POST방식으로 호출한 경우 유효성 검증
+    # False일 경우 회원가입 페이지로 돌아감
+    # True일 경우 flash메세지 보낸 후 redirect (main.html: 메세지 획득 후 alert 실행)
+    # DB관련 작업 추가 예정
     if request.method == 'POST':
         if (form.validate() == False):
             return render_template('signup.html', form=form)
