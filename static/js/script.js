@@ -56,21 +56,11 @@ function login() {
 function signup() {
     $.ajax({
         type: "GET",
-        url: "/signup",
+        url: "/login/signup",
         data: {},
         success: function (response) {
-            location.href = "/signup"
-        }
-    })
-}
-
-function duplicationCheck(inputID) {
-    $.ajax({
-        type: "POST",
-        url: "/signup/idcheck",
-        data: {id_give: inputID},
-        success: function (response) {
-            console.log(response["msg"])
+            location.href = "/login/signup"
+            // 회원가입 버튼을 눌렀을 때 login.html에 login_form='signup' 변수를 보내고 불러오기
         }
     })
 }

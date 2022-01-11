@@ -1,5 +1,5 @@
 from flask import Flask, render_template, jsonify, request, flash, redirect, url_for, session
-from forms import RegistrationForm
+from forms import LoginForm
 
 app = Flask(__name__)
 
@@ -20,6 +20,7 @@ db = client.gangchu
 def home():
     return render_template('main.html')
 
+
 @app.route('/readList', methods=['GET'])
 def read_list():
     class_list = list(db.classlist.find({}, {'_id': False}))
@@ -36,6 +37,7 @@ def route_board():
     title_receive = request.args.get('title')
     review_list = list(db.review.find({'title': title_receive}, {'_id': False}))
     return render_template('board.html', review_list=review_list, title=title_receive)
+
 
 @app.route('/writeBoard', methods=['POST'])
 def write_review():
@@ -58,10 +60,10 @@ def route_mypage():
     return render_template('mypage.html')
 
 
-@app.route('/signup', methods=["GET", "POST"])
-def route_signup():
+@app.route("/login", methods=["GET", "POST"])
+def route_login():
     # forms에 선언한 RegistrationForm클래스의 자식 객체 생성
-    form = RegistrationForm()
+    form = LoginForm()
 
     # POST방식으로 호출한 경우 유효성 검증
     # False일 경우 회원가입 페이지로 돌아감
@@ -69,7 +71,7 @@ def route_signup():
     # DB관련 작업 추가 예정
     if request.method == 'POST':
         if (form.validate() == False):
-            return render_template('signup.html', form=form)
+            return render_template('login.html', form=form)
         else:
             flash(f'{form.username.data}님 환영합니다')
             return redirect(url_for("home"))
@@ -84,13 +86,19 @@ def route_signup():
         #     return redirect(url_for('main.index'))
         # else:
         #     flash('이미 존재하는 사용자입니다.')
+    return render_template('login.html', form=form)
 
-    return render_template('signup.html', form=form)
 
-
-@app.route("/login")
-def route_login():
-    return render_template('login.html')
+@app.route('/login/<signup>', methods=["GET", "POST"])
+def route_signup(signup):
+    signup_form = LoginForm()
+    if request.method == 'POST':
+        if (signup_form.validate() == False):
+            return render_template('login.html', form=signup_form, login_form='signup')
+        else:
+            flash(f'{signup_form.username.data}님 환영합니다')
+            return redirect(url_for("home"))
+    return render_template('login.html', form=signup_form, login_form=signup)
 
 
 if __name__ == '__main__':

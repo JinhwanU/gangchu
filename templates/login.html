@@ -2,10 +2,130 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+    <script type="text/javascript" src="../static/js/script.js"></script>
+
+    {% if login_form == 'signup' %}
+        <title>회원가입</title>
+    {% else %}
+        <title>로그인</title>
+    {% endif %}
+
 </head>
 <body>
 
-<h1> 로그인 </h1>
+<div class="wrap-login">
+
+    <!-- 필드오류 -->
+    {# form.errors.items()는 app.py의 form.validate()에서 검증한 form data의 에러를 반환한다 #}
+    {# field에는 오류가 발생한 라벨 이름 저장 #}
+    {# errors에는 오류 내용 저장 #}
+    {#    {% for field, errors in form.errors.items() %}#}
+    {#        <div class="alert alert-danger" role="alert">#}
+    {#            <strong>{{ form[field].label }}</strong>: {{ ', '.join(errors) }}#}
+    {#        </div>#}
+    {#    {% endfor %}#}
+
+    {% for error in form.username.errors %}
+        <div class="alert alert-danger" role="alert">
+            <strong>{{ error }}</strong>
+        </div>
+    {% endfor %}
+
+
+    {% if login_form == 'signup' %}
+        {% for error in form.email.errors %}
+            <div class="alert alert-danger" role="alert">
+                <strong>{{ error }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% for error in form.password.errors %}
+        <div class="alert alert-danger" role="alert">
+            <strong>{{ error }}</strong>
+        </div>
+    {% endfor %}
+
+    {% if login_form == 'signup' %}
+        {% for error in form.confirm_password.errors %}
+            <div class="alert alert-danger" role="alert">
+                <strong>{{ error }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- flash 오류 -->
+    {# app.py에서 보낸 flash 메세지를 획득하여 출력 #}
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+
+    {% if login_form == 'signup' %}
+        <form style="width: 400px" action="/login/signup" method="post">
+    {% else %}
+        <form style="width: 400px" action="/login" method="post">
+    {% endif %}
+    {# CSRF로부터 보호하는 데 필요한 작업을 처리 #}
+    {{ form.hidden_tag() }}
+
+    <div class="form-group">
+        {{ form.username.label(class="form-label") }}
+        {{ form.username(class="form-control") }}
+    </div>
+
+    {% if login_form == 'signup' %}
+        <div class="form-group" id="email-form">
+            {{ form.email.label(class="form-label") }}
+            {{ form.email(class="form-control") }}
+        </div>
+    {% endif %}
+
+
+    <div class="form-group">
+        {{ form.password.label(class="form-label") }}
+        {{ form.password(class="form-control") }}
+    </div>
+    {% if login_form=='signup' %}
+        <div class="form-group" id="pwcheck-form">
+            {{ form.confirm_password.label(class="form-label") }}
+            {{ form.confirm_password(class="form-control") }}
+        </div>
+    {% endif %}
+
+    <div class="form-row">
+        <div class="col-6">
+            {% if login_form == 'signup' %}
+                {{ form.signup_btn(class="btn btn-primary col-12") }}
+            {% else %}
+                {{ form.login_btn(class="btn btn-primary col-12") }}
+            {% endif %}
+        </div>
+        <div class="col-6">
+            <button class="btn btn-secondary col-12" onclick=location.href='/'>취소</button>
+        </div>
+    </div>
+    </form>
+</div>
 </body>
 </html>
