@@ -15,9 +15,25 @@ client = MongoClient('localhost', 27017)
 db = client.gangchu
 
 
+def gi(name):
+    temp = list(db.review.find({'title':name},))
+    cnt = 0;
+    for i in temp:
+        rating = int(i['rating'])
+        cnt += rating
+    if cnt is 0:
+        aver = '없음'
+    else:
+        aver = cnt / len(temp)
+    db.classlist.update_one({'title': name}, {'$set':{"aver":aver} },False,True)
+
 # HTML 화면 보여주기
 @app.route('/')
 def home():
+    temp = list(db.classlist.find({}))
+    for h in temp:
+        insert = h['title']
+        gi(insert);
     return render_template('main.html')
 
 
@@ -32,11 +48,16 @@ def route_map():
     return render_template('map.html')
 
 
-@app.route('/board')
+@app.route('/board', methods=['get'])
 def route_board():
     title_receive = request.args.get('title')
-    review_list = list(db.review.find({'title': title_receive}, {'_id': False}))
-    return render_template('board.html', review_list=review_list, title=title_receive)
+    return render_template('board.html', title = title_receive)
+
+@app.route('/readBoard', methods=['get'])
+def read_review():
+    title_receive = request.args.get('title')
+    review_list = list(db.review.find({'title':title_receive}, {'_id': False}))
+    return jsonify({'review_list': review_list, 'result': 'success'})
 
 
 @app.route('/writeBoard', methods=['POST'])
