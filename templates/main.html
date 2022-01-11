@@ -9,8 +9,8 @@
     {% endwith %}
 <style>
         .cat {
-            height: 150px;
-            width: 150px;
+            height: 190px;
+            width: 190px;
         }
     </style>
     <script>
@@ -31,7 +31,8 @@
                         $('#star-box').empty()
                         for (let i = 0; i < classlist.length; i++) {
                             let list = classlist[i]
-                            let temphtml = `<div class="row g-0">
+                            let temphtml = `<div class="card mb-3" style="max-width: 540px;">
+<div class="row g-0">
     <div class="col-md-4">
       <img src="${list['img_url']}" class="img-fluid rounded-start cat" alt="...">
     </div>
@@ -44,7 +45,8 @@
         <br>
       </div>
     </div>
-  </div>`
+  </div>
+</div>`
                             $('#star-box').append(temphtml)
                         }
                     }
