@@ -22,7 +22,6 @@
    - flask-WTF
    - WTForms
    - email-validator
-   - flask-Bcrypt
 - `Frontend`
    - jinja
    - bulma
