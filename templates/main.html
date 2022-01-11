@@ -1,15 +1,6 @@
 {% extends 'index.html' %}
 {% block content %}
-<<<<<<< HEAD
-    <style>
-        .cat {
-            height: 150px;
-            width: 150px;
-        }
-    </style>
-    <script>
 
-<<<<<<< Updated upstream
     {# flash 메세지 전달 받으면 alert 띄우기 #}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -26,8 +17,6 @@
     </style>
     <script>
 
-=======
->>>>>>> Stashed changes
         $(document).ready(function () {
             // index.html 로드가 완료되면 자동으로 showStar() 함수를 호출합니다.
             showStar();
@@ -40,7 +29,6 @@
                 data: {},
                 success: function (response) {
                     if (response['result'] == 'success') {
-<<<<<<< Updated upstream
                         let classlist = response['class_list']
                         $('#star-box').empty()
                         for (let i = 0; i < classlist.length; i++) {
@@ -62,27 +50,6 @@
   </div>
 </div>`
                             $('#class-box').append(temphtml)
-=======
-                        let starslist = response['stars_list']
-                        $('#star-box').empty()
-                        for (let i = 0; i < starslist.length; i++) {
-                            let star = starslist[i]
-                            let temphtml = `<div class="row g-0">
-    <div class="col-md-4">
-      <img src="${star['img_url']}" class="img-fluid rounded-start cat" alt="...">
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <a href="${star['url']}" class="card-title">${star['title']}</a>
-        <p class="card-text">${star['text']}</p>
-        <p class="card-text"><small class="text-muted">평점</small></p>
-        <a href="/board?title=${star['title']}">리뷰보러가기</a>
-        <br>
-      </div>
-    </div>
-  </div>`
-                            $('#star-box').append(temphtml)
->>>>>>> Stashed changes
                         }
                     }
                 }
@@ -91,29 +58,9 @@
 
     </script>
 
-<<<<<<< Updated upstream
     <h1> 메인페이지</h1>
    <div class="card mb-3" style="max-width: 540px;" id="class-box">
 
 </div>
-=======
-
-
-=======
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <script>
-                alert("{{messages[-1]}}")
-            </script>
-        {% endif %}
-    {% endwith %}
-
-
-    <h1> 메인페이지</h1>
-    <div class="card mb-3" style="max-width: 540px;" id="star-box">
-
-</div>
->>>>>>> 470fadc1dbcf089c3269acdd8357bdd295222e40
->>>>>>> Stashed changes
 
 {% endblock %}
