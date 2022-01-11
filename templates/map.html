@@ -47,6 +47,7 @@
         return dist
 }
   // 네이버 지도 
+<<<<<<< Updated upstream
   $(document).ready(function () {
     let map = new naver.maps.Map('map', {
         center: new naver.maps.LatLng(37.4981125, 127.0379399),
@@ -82,6 +83,14 @@
   // };
 
   // var map = new naver.maps.Map('map', mapOptions);
+=======
+  var mapOptions = {
+    center: new naver.maps.LatLng(37.3595704, 127.105399),
+    zoom: 10
+  };
+
+  var map = new naver.maps.Map('map', mapOptions);
+>>>>>>> Stashed changes
 
     // 사용자 위치 정보
   navigator.geolocation.getCurrentPosition((position) => {
