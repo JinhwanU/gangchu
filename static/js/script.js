@@ -4,7 +4,7 @@ function main() {
         url: "/",
         data: {},
         success: function (response) {
-            location.replace("/")
+            location.href = "/"
         }
     })
 }
@@ -15,47 +15,62 @@ function map() {
         url: "/map",
         data: {},
         success: function (response) {
-            location.replace("/map")
+            location.href = "/map"
         }
     })
 }
+
 function board() {
     $.ajax({
         type: "GET",
         url: "/board",
         data: {},
         success: function (response) {
-            location.replace("/board")
+            location.href = "/board"
         }
     })
 }
+
 function mypage() {
     $.ajax({
         type: "GET",
         url: "/mypage",
         data: {},
         success: function (response) {
-            location.replace("/mypage")
+            location.href = "/mypage"
         }
     })
 }
+
 function login() {
     $.ajax({
         type: "GET",
         url: "/login",
         data: {},
         success: function (response) {
-            location.replace("/login")
+            location.href = "/login"
         }
     })
 }
+
 function signup() {
     $.ajax({
         type: "GET",
         url: "/signup",
         data: {},
         success: function (response) {
-            location.replace("/signup")
+            location.href = "/signup"
+        }
+    })
+}
+
+function duplicationCheck(inputID) {
+    $.ajax({
+        type: "POST",
+        url: "/signup/idcheck",
+        data: {id_give: inputID},
+        success: function (response) {
+            console.log(response["msg"])
         }
     })
 }
