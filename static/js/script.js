@@ -138,14 +138,16 @@ function showClass(num) {
                     let temphtml = `<div class="card mb-3 class-card font1 " style="border-radius: 12px">
 <div class="row g-0 align-left">
     <div class="col-md-4">
-      <img src="${list['img_url']}" class="img-fluid rounded-start img_px" alt="...">
-    </div>
+    <a href="${list['url']}">
+    <img src="${list['img_url']}" class="img-fluid rounded-start img_px" alt="...">   
+</a>
+       </div>
     <div class="col-md-8">
       <div class="card-body">
-        <a href="${list['url']}" class="card-title" ><b>${list['title']}</b></a>
+        <p class="card-title" ><b>${list['title']}</b></p>
         <p><small class="card-text">${list['text']}</small></p>
-        <p class="card-text"><small class="text-muted">평점 : ${list['aver']} /5</small></p>
-        <a href="/board?title=${list['title']}" class="font2" style="font-size: 20px">리뷰보러가기</a>
+        <div class="card-text"><small class="text-muted">평점 : ${list['aver']}</small></div>
+        <button onclick="location.href='/board?title=${list["title"]}'" class="font2 btn btn-outline-primary" style="font-size: 20px">리뷰보러가기</button>
         <br>
       </div>
     </div>

@@ -1,10 +1,9 @@
 {% extends 'index.html' %}
 {% block content %}
-
-{#    <div class="align-center">#}
-{#        <img src="../static/study%20starter.png">#}
-{#        <h2 class="font3">코딩입문을 위한 강의추천</h2>#}
-{#    </div>#}
+    <div class="align-center">
+        <img src="../static/study%20starter.png">
+        <h2 class="font3">코딩입문을 위한 강의추천</h2>
+    </div>
     {# flash 메세지 전달 받으면 alert 띄우기 #}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
