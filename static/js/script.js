@@ -109,6 +109,7 @@ function updateReview(id){
     }
 
 }
+
 function deleteReview(id){
     if(confirm("리뷰를 삭제하시겠습니까?")==true)
     {
@@ -151,9 +152,9 @@ function showreview(num) {
         <p  style="width: 100px"> 평점 : ${rating_rec}/5 </p>
     </div>
     <div class="col-md-2">
-    <a href="#" onclick="updateReview('${sec_id}')">수정</a>
+    <button class="btn btn-outline-dark btn-sm font1" onclick="updateReview('${sec_id}')">수정</button>
     &nbsp&nbsp&nbsp
-    <a href="#" onclick="deleteReview('${sec_id}')">삭제</a>
+    <button class="btn btn-outline-dark btn-sm font1" onclick="deleteReview('${sec_id}')">삭제</button>
     </div>
     <div class="col-12">
         <label for="review" class="form-label font1">리뷰</label>

@@ -4,7 +4,7 @@
         <img src="../static/study%20starter.png">
         <h2 class="font3">코딩입문을 위한 강의리뷰<img src="../static/rtan.png" style="width: 50px;height: 50px"></h2>
     </div>
-    <p class="btn-group align-center" role="group" aria-label="Basic outlined example">
+    <p class="btn-group align-center" style="display: block" role="group" aria-label="Basic outlined example">
   <button type="button" class="btn btn-outline-dark" onclick="online()">스파르타 온라인 강의</button>
   <button type="button" class="btn btn-outline-dark" onclick="offline()">오프라인 코딩 학원</button>
 
@@ -37,7 +37,10 @@
         )
     </script>
     {#    강의 담는 리스트#}
-    <div style="max-width: 540px;" class="align-center wrapper" id="class-box">
+    <div style="max-width: 540px; display: block" class="align-center wrapper" id="class-box">
+
+    </div>
+    <div style="max-width: 540px;display: none" class="align-center wrapper" id="academy">
 
     </div>
 
