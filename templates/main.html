@@ -1,6 +1,10 @@
 {% extends 'index.html' %}
 {% block content %}
 
+{#    <div class="align-center">#}
+{#        <img src="../static/study%20starter.png">#}
+{#        <h2 class="font3">코딩입문을 위한 강의추천</h2>#}
+{#    </div>#}
     {# flash 메세지 전달 받으면 alert 띄우기 #}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -12,10 +16,10 @@
     <script>
 
         $(document).ready(function () {
-            let cnt = 0;
-            for(;cnt<6;cnt++){
-                showClass(cnt)
-            }
+                let cnt = 0;
+                for (; cnt < 6; cnt++) {
+                    showClass(cnt)
+                }
                 $(document).scroll(function () {
                     let maxHeight = $(document).height();
                     let currentScroll = $(window).scrollTop() + $(window).height();
@@ -28,9 +32,9 @@
             }
         )
     </script>
-{#    강의 담는 리스트#}
-   <div style="max-width: 540px;" class="align-center wrapper" id="class-box">
+    {#    강의 담는 리스트#}
+    <div style="max-width: 540px;" class="align-center wrapper" id="class-box">
 
-</div>
+    </div>
 
 {% endblock %}

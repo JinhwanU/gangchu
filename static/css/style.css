@@ -22,15 +22,16 @@
 }
 
 .img_px {
-    height: 190px;
-    width: 190px;
+    height: 200px;
+    width: 200px;
 }
 
 .board_wrap {
     width: 900px;
     margin: auto;
     padding: 10px;
-    border: ridge;
+    border: solid;
+    border-width: 1px;
     border-radius: 5px;
 }
 
@@ -41,7 +42,7 @@
 
 .class-card {
     max-width: 540px;
-    max-height: 200px;
+    max-height: 201px;
 
 }
 

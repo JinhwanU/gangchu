@@ -24,7 +24,7 @@ def gi(name):
     if cnt == 0:
         aver = '없음'
     else:
-        aver = cnt / len(temp)
+        aver =round(cnt / len(temp),2)
     db.classlist.update_one({'title': name}, {'$set':{"aver":aver} },False,True)
 
 # HTML 화면 보여주기

@@ -135,7 +135,7 @@ function showClass(num) {
             if (response['result'] == 'success') {
                 let classlist = response['class_list']
                     let list = classlist[num]
-                    let temphtml = `<div class="card mb-3 class-card font1">
+                    let temphtml = `<div class="card mb-3 class-card font1 " style="border-radius: 12px">
 <div class="row g-0 align-left">
     <div class="col-md-4">
       <img src="${list['img_url']}" class="img-fluid rounded-start img_px" alt="...">
