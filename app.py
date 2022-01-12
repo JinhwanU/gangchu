@@ -21,7 +21,7 @@ def gi(name):
     for i in temp:
         rating = int(i['rating'])
         cnt += rating
-    if cnt is 0:
+    if cnt == 0:
         aver = '없음'
     else:
         aver = cnt / len(temp)

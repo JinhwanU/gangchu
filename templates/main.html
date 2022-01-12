@@ -18,47 +18,14 @@
     <script>
 
         $(document).ready(function () {
-            // index.html 로드가 완료되면 자동으로 showStar() 함수를 호출합니다.
-            showStar();
+            // index.html 로드가 완료되면 자동으로 showClass() 함수를 호출합니다.
+            showClass();
         });
-
-        function showStar() {
-            $.ajax({
-                type: 'GET',
-                url: '/readList',
-                data: {},
-                success: function (response) {
-                    if (response['result'] == 'success') {
-                        let classlist = response['class_list']
-                        $('#star-box').empty()
-                        for (let i = 0; i < classlist.length; i++) {
-                            let list = classlist[i]
-                            let temphtml = `<div class="card mb-3" style="max-width: 540px;">
-<div class="row g-0">
-    <div class="col-md-4">
-      <img src="${list['img_url']}" class="img-fluid rounded-start cat" alt="...">
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <a href="${list['url']}" class="card-title">${list['title']}</a>
-        <p class="card-text">${list['text']}</p>
-        <p class="card-text"><small class="text-muted">${list['aver']}</small></p>
-        <a href="/board?title=${list['title']}">리뷰보러가기</a>
-        <br>
-      </div>
-    </div>
-  </div>
-</div>`
-                            $('#class-box').append(temphtml)
-                        }
-                    }
-                }
-            });
-        }
 
     </script>
 
     <h1> 메인페이지</h1>
+{#    강의 담는 리스트#}
    <div class="card mb-3" style="max-width: 540px;" id="class-box">
 
 </div>
