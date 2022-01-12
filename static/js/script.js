@@ -19,18 +19,6 @@ function map() {
         }
     })
 }
-
-function board() {
-    $.ajax({
-        type: "GET",
-        url: "/board",
-        data: {},
-        success: function (response) {
-            location.href = "/board"
-        }
-    })
-}
-
 function mypage() {
     $.ajax({
         type: "GET",
