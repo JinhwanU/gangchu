@@ -9,3 +9,21 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+.img_px {
+    height: 190px;
+    width: 190px;
+}
+.board_wrap {
+    width: 900px;
+    margin: auto;
+    padding: 10px;
+    border: ridge;
+    border-radius: 5px;
+}
+
+
+.board_border {
+    border: groove lightgrey;
+    border-radius: 3px;
+}

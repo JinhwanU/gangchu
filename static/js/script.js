@@ -135,12 +135,12 @@ function showClass() {
                     let temphtml = `<div class="card mb-3" style="max-width: 540px;">
 <div class="row g-0">
     <div class="col-md-4">
-      <img src="${list['img_url']}" class="img-fluid rounded-start cat" alt="...">
+      <img src="${list['img_url']}" class="img-fluid rounded-start img_px" alt="...">
     </div>
     <div class="col-md-8">
       <div class="card-body">
         <a href="${list['url']}" class="card-title">${list['title']}</a>
-        <p class="card-text">${list['text']}</p>
+        <p><small class="card-text">${list['text']}</small></p>
         <p class="card-text"><small class="text-muted">평점 : ${list['aver']}</small></p>
         <a href="/board?title=${list['title']}">리뷰보러가기</a>
         <br>
