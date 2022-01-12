@@ -12,15 +12,24 @@
     <script>
 
         $(document).ready(function () {
-            // index.html 로드가 완료되면 자동으로 showClass() 함수를 호출합니다.
-            showClass();
-        });
-
+            let cnt = 0;
+            for(;cnt<6;cnt++){
+                showClass(cnt)
+            }
+                $(document).scroll(function () {
+                    let maxHeight = $(document).height();
+                    let currentScroll = $(window).scrollTop() + $(window).height();
+                    let title = $('#title').text()
+                    if (maxHeight <= currentScroll + 100) {
+                        showClass(cnt)
+                        cnt++;
+                    }
+                })
+            }
+        )
     </script>
-
-    <h1> 메인페이지</h1>
 {#    강의 담는 리스트#}
-   <div class="card mb-3" style="max-width: 540px;" id="class-box">
+   <div style="max-width: 540px;" class="align-center wrapper" id="class-box">
 
 </div>
 

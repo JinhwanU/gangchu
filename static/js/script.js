@@ -70,6 +70,10 @@ function writeReview() {
     let rating = $('#rating').val()
     let review = $('#review').val()
     let title = $('#title').text()
+    if(id == '' || review == ''){
+        alert('입력을 확인해주세요!')
+        return
+    }
     $.ajax({
         type: "POST",
         url: "/writeBoard",
@@ -97,21 +101,22 @@ function showreview(num) {
                     let id_rec = review['id']
                     let rating_rec = review['rating']
                     let review_rec = review['review']
-                    let html = `<div class="row g-3 board_wrap">
+                    let html = `<div class="row g-3 board_wrap font3">
     <div class="col-md-6">
-        <label for="user_id" class="form-label">아이디</label>
-        <p class="board_border" style="width: 200px"> ${id_rec} </p>
+        <p style="width: 200px">아이디 : ${id_rec} </p>
     </div>
     <div class="col-md-6">
-        <label for="rating" class="form-label">평점</label>
-        <p class="board_border" style="width: 50px"> ${rating_rec} </p>
+        
+        <p  style="width: 100px"> 평점 : ${rating_rec}/5 </p>
     </div>
     <div class="col-12">
-        <label for="review" class="form-label">리뷰</label>
-        <p class="board_border" > ${review_rec}
+        <label for="review" class="form-label font1">리뷰</label>
+        <p class="border border-1" > ${review_rec}
         <p/>
+        
     </div>
 </div>
+<br>
                                     `
                     $('#add_review').append(html)
                 }
@@ -121,7 +126,7 @@ function showreview(num) {
     })
 }
 
-function showClass() {
+function showClass(num) {
     $.ajax({
         type: 'GET',
         url: '/readList',
@@ -129,20 +134,18 @@ function showClass() {
         success: function (response) {
             if (response['result'] == 'success') {
                 let classlist = response['class_list']
-                $('#star-box').empty()
-                for (let i = 0; i < classlist.length; i++) {
-                    let list = classlist[i]
-                    let temphtml = `<div class="card mb-3" style="max-width: 540px;">
-<div class="row g-0">
+                    let list = classlist[num]
+                    let temphtml = `<div class="card mb-3 class-card font1">
+<div class="row g-0 align-left">
     <div class="col-md-4">
       <img src="${list['img_url']}" class="img-fluid rounded-start img_px" alt="...">
     </div>
     <div class="col-md-8">
       <div class="card-body">
-        <a href="${list['url']}" class="card-title">${list['title']}</a>
+        <a href="${list['url']}" class="card-title" ><b>${list['title']}</b></a>
         <p><small class="card-text">${list['text']}</small></p>
-        <p class="card-text"><small class="text-muted">평점 : ${list['aver']}</small></p>
-        <a href="/board?title=${list['title']}">리뷰보러가기</a>
+        <p class="card-text"><small class="text-muted">평점 : ${list['aver']} /5</small></p>
+        <a href="/board?title=${list['title']}" class="font2" style="font-size: 20px">리뷰보러가기</a>
         <br>
       </div>
     </div>
@@ -151,6 +154,6 @@ function showClass() {
                     $('#class-box').append(temphtml)
                 }
             }
-        }
+
     });
 }

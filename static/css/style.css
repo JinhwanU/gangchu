@@ -1,6 +1,17 @@
 .wrapper {
-    width: 1000px;
+    width: 900px;
     margin: 0 auto;
+}
+
+.align-center {
+    text-align: center;
+}
+
+.align-left {
+    text-align: left;
+}
+.align-right {
+    text-align: right;
 }
 
 .wrap-login {
@@ -14,6 +25,7 @@
     height: 190px;
     width: 190px;
 }
+
 .board_wrap {
     width: 900px;
     margin: auto;
@@ -22,8 +34,23 @@
     border-radius: 5px;
 }
 
-
 .board_border {
     border: groove lightgrey;
     border-radius: 3px;
+}
+
+.class-card {
+    max-width: 540px;
+    max-height: 200px;
+
+}
+
+.font1 {
+    font-family: 'IBM Plex Sans KR', sans-serif;
+}
+.font2{
+    font-family: 'Nanum Pen Script', cursive;
+}
+.font3{
+    font-family: 'Noto Serif KR', serif;
 }

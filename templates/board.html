@@ -9,7 +9,6 @@
                 $(document).scroll(function () {
                     let maxHeight = $(document).height();
                     let currentScroll = $(window).scrollTop() + $(window).height();
-                    let title = $('#title').text()
                     if (maxHeight <= currentScroll + 100) {
                         showreview(cnt)
                         cnt++;
@@ -19,12 +18,12 @@
         )
 
 </script>
-<h1> 게시판 </h1>
 <body>
 <p style="display: none" id="title">{{ title }}</p>
-<button type="button" class="btn btn-secondary btn-sm" onclick="openClose()">리뷰작성</button>
+    <h2 class="align-right font2">{{ title }} 리뷰</h2>
+<button type="button" class="btn btn-secondary btn-sm font2" style="font-size: 20px" onclick="openClose()">리뷰작성</button>
 
-{#    인풋박스 #}
+{#    인풋박스 로그인시 나타남#}
     <div class="row g-3 board_wrap" id="post-box" style="display: none">
     <div class="col-md-6">
         <label for="user_id" class="form-label">아이디</label>
@@ -38,10 +37,11 @@
         <label for="review" class="form-label">리뷰</label>
         <textarea class="form-control" id="review" rows="3"> </textarea>
     </div>
-{#    제출버튼 로그인시 나타나게 #}
-    <button onclick="writeReview()">제출</button>
+        <br>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="button"  class="btn btn-secondary btn-sm font2" style="font-size: 20px" onclick="writeReview()">제출</button>
+        </div>
 </div>
-<h2>{{ title }}의 리뷰</h2>
 <div id="add_review">
 </div>
 {% endblock %}

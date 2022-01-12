@@ -4,11 +4,16 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&family=Nanum+Pen+Script&family=Noto+Serif+KR:wght@500&display=swap"
+          rel="stylesheet">
 
-     <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
     <!-- jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -16,25 +21,32 @@
     <link rel="stylesheet" type="text/css" href="../static/css/style.css">
     <script type="text/javascript" src="../static/js/script.js"></script>
 
-    <title>개발강의 추천 사이트 - 강추</title>
+    <title>STUDY STARTER</title>
 </head>
 <body>
 <div class="wrapper">
-    <div class="wrapper">
-        <button role="button" onclick="main()">메인페이지
-        </button>
-        <button role="button" onclick="map() ">지도
-        </button>
-        <button role="button" onclick="mypage()">마이페이지
-        </button>
-        <button role="button" onclick="login()">로그인
-        </button>
-        <button role="button" onclick="signup()">회원가입
-        </button>
+    <div class="align-center">
+        <img src="../static/study%20starter.png">
+        <h2 class="font3">코딩입문을 위한 강의추천</h2>
     </div>
 
+    <div class="wrapper align-center">
+        <button class="btn btn-dark" role="button" onclick="main()">메인페이지
+        </button>
+        <button class="btn btn-dark" role="button" onclick="map() ">지도
+        </button>
+        <button class="btn btn-dark" role="button" onclick="mypage()">마이페이지
+        </button>
+        <button class="btn btn-dark" role="button" onclick="login()">로그인
+        </button>
+        <button class="btn btn-dark" role="button" onclick="signup()">회원가입
+        </button>
+    </div>
+    <br>
+    </script>
     {% block content %}
     {% endblock %}
 </div>
+
 </body>
 </html>
