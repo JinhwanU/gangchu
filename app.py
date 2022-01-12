@@ -70,23 +70,26 @@ def route_login():
     # POST방식으로 호출한 경우 유효성 검증
     if request.method == 'POST':
         if form.validate() == False:
-            print("hello1")
             return render_template('login.html', form=form)
-        else:
-            print("hello2")
-            flash(f'{form.userID.data}님 환영합니다')
-            return redirect(url_for("home"))
 
-        # user = User.query.filter_by(username=form.username.data).first()
-        # if not user:
-        #     user = User(username=form.username.data,
-        #                 password=generate_password_hash(form.password1.data),
-        #                 email=form.email.data)
-        #     db.session.add(user)
-        #     db.session.commit()
-        #     return redirect(url_for('main.index'))
-        # else:
-        #     flash('이미 존재하는 사용자입니다.')
+        # 로그인 검증
+        else:
+            receive_id = form.userID.data
+            receive_pw = form.password.data
+            password_hash = hashlib.sha256(receive_pw.encode('utf-8')).hexdigest()
+
+            result = db.users.find_one({'id': receive_id, 'password': password_hash})
+
+            # 로그인 성공
+            if result is not None:
+                print("로그인성공/쿠키생성")
+                return redirect(url_for("home"))
+
+            # 로그인 실패
+            else:
+                flash('아이디와 패스워드를 확인해주세요')
+                return render_template('login.html', form=form)
+
     return render_template('login.html', form=form)
 
 
@@ -97,22 +100,25 @@ def route_signup(signup):
         if form.validate() == False:
             return render_template('login.html', form=form, login_form=signup)
         else:
-            # 중복 검사
             duplic_id = db.users.find_one({'id': form.userID.data}, {'_id': False, 'id': 1})
             duplic_email = db.users.find_one({'email': form.email.data}, {'_id': False, 'email': 1})
             duplic_check = [duplic_id, duplic_email]
 
             result = list(filter(None, duplic_check))
 
-            if len(result) > 0:
+            # 중복 검사
+            if result:
                 for i in result:
                     key = list(i.keys())
                     flash(f'이미 사용된 {key} 입니다.')
                 return render_template('login.html', form=form, login_form=signup)
+
+            # 회원가입 성공(DB에 저장)
             else:
+                # 비밀번호 암호화(hash)
                 password_hash = hashlib.sha256(form.password.data.encode('utf-8')).hexdigest()
                 doc = {
-                    'id': form.userID.data, 'email': form.userID.data, 'password': password_hash
+                    'id': form.userID.data, 'email': form.email.data, 'password': password_hash
                 }
                 db.users.insert_one(doc)
                 flash(f'{form.userID.data}님 환영합니다. 로그인 후 이용해주세요')

@@ -33,17 +33,7 @@
 
 <div class="wrap-login">
 
-    <!-- 필드오류 -->
-    {# form.errors.items()는 app.py의 form.validate()에서 검증한 form data의 에러를 반환한다 #}
-    {# field에는 오류가 발생한 라벨 이름 저장 #}
-    {# errors에는 오류 내용 저장 #}
-    {#    {% for field, errors in form.errors.items() %}#}
-    {#        <div class="alert alert-danger" role="alert">#}
-    {#            <strong>{{ form[field].label }}</strong>: {{ ', '.join(errors) }}#}
-    {#        </div>#}
-    {#    {% endfor %}#}
-
-    {# 회원가입 에러 #}
+    {# 회원가입 에러 핸들러 #}
     {% if login_form == 'signup' %}
         {% for error in form.userID.errors %}
             <div class="alert alert-danger" role="alert">
@@ -68,8 +58,7 @@
         <form style="width: 400px" action="/login/signup" method="post">
 
 
-
-        {# 로그인 에러#}
+    {# 로그인 에러 핸들러 #}
     {% else %}
         {% for error in form.userID.errors %}
             <div class="alert alert-danger" role="alert">
@@ -94,11 +83,10 @@
     {% endfor %}
 
 
-
     {# CSRF로부터 보호하는 데 필요한 작업을 처리 #}
     {{ form.hidden_tag() }}
 
-    {# 회원가입 #}
+    {# 회원가입 UI - ID/Email/PW/PWcheck #}
     {% if login_form == 'signup' %}
         <div class="form-group">
             {{ form.userID.label(class="form-label") }}
@@ -125,7 +113,7 @@
             </div>
         </div>
 
-        {# 로그인 #}
+        {# 로그인 UI - ID/PW #}
     {% else %}
         <div class="form-group">
             {{ form.userID.label(class="form-label") }}
