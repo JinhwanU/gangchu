@@ -19,6 +19,7 @@ function map() {
         }
     })
 }
+
 function mypage() {
     $.ajax({
         type: "GET",
@@ -70,7 +71,7 @@ function writeReview() {
     let rating = $('#rating').val()
     let review = $('#review').val()
     let title = $('#title').text()
-    if(id == '' || review == ''){
+    if (id == '' || review == '') {
         alert('입력을 확인해주세요!')
         return
     }
@@ -89,6 +90,44 @@ function writeReview() {
     })
 }
 
+function updateReview(id){
+    let update_review = prompt("리뷰를 수정해주세요")
+    {
+        $.ajax({
+        type: "POST",
+        url: "/updateBoard",
+        data: {
+            id_give: id,
+            review_give: update_review.toLowerCase(),
+        },
+        success: function (response) { // 성공하면
+            if (response["result"] == "success") {
+                window.location.reload()
+            }
+        }
+    })
+    }
+
+}
+function deleteReview(id){
+    if(confirm("리뷰를 삭제하시겠습니까?")==true)
+    {
+        $.ajax({
+        type: "POST",
+        url: "/deleteBoard",
+        data: {
+            id_give: id
+        },
+        success: function (response) { // 성공하면
+            if (response["result"] == "success") {
+                window.location.reload()
+            }
+        }
+    })
+    }
+
+}
+
 function showreview(num) {
     let title = $('#title').text()
     $.ajax({
@@ -97,17 +136,24 @@ function showreview(num) {
         data: {'title': title},
         success: function (response) {
             if (response["result"] == "success") {
-                    let review = response['review_list'][num]
-                    let id_rec = review['id']
-                    let rating_rec = review['rating']
-                    let review_rec = review['review']
-                    let html = `<div class="row g-3 board_wrap font3">
+                let sec_id = response['sec_id'][num]['_id']
+                let review = response['review_list'][num]
+                let id_rec = review['id']
+                let tiile_rec = review['title']
+                let rating_rec = review['rating']
+                let review_rec = review['review']
+                let html = `<div class="row g-3 board_wrap font3">
     <div class="col-md-6">
         <p style="width: 200px">아이디 : ${id_rec} </p>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
         
         <p  style="width: 100px"> 평점 : ${rating_rec}/5 </p>
+    </div>
+    <div class="col-md-2">
+    <a href="#" onclick="updateReview('${sec_id}')">수정</a>
+    &nbsp&nbsp&nbsp
+    <a href="#" onclick="deleteReview('${sec_id}')">삭제</a>
     </div>
     <div class="col-12">
         <label for="review" class="form-label font1">리뷰</label>
@@ -118,8 +164,8 @@ function showreview(num) {
 </div>
 <br>
                                     `
-                    $('#add_review').append(html)
-                }
+                $('#add_review').append(html)
+            }
 
 
         }
@@ -134,9 +180,9 @@ function showClass(num) {
         success: function (response) {
             if (response['result'] == 'success') {
                 let classlist = response['class_list']
-                    let list = classlist[num]
-                    let temphtml = `<div class="card mb-3 class-card font1 " style="border-radius: 12px">
-<div class="row g-0 align-left">
+                let list = classlist[num]
+                let temphtml = `<div class="card mb-3 class-card font1 " style="border-radius: 12px">
+<div class="row g-0 align-left" >
     <div class="col-md-4">
     <a href="${list['url']}">
     <img src="${list['img_url']}" class="img-fluid rounded-start img_px" alt="...">   
@@ -153,9 +199,17 @@ function showClass(num) {
     </div>
   </div>
 </div>`
-                    $('#class-box').append(temphtml)
-                }
+                $('#class-box').append(temphtml)
             }
+        }
 
     });
+}
+
+function online() {
+
+}
+
+function offline() {
+
 }

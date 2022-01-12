@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify, request, flash, redirect, url_for, session
 from forms import LoginForm
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
 
@@ -51,14 +52,35 @@ def route_map():
 @app.route('/board', methods=['get'])
 def route_board():
     title_receive = request.args.get('title')
-    return render_template('board.html', title = title_receive)
+    img_receive = db.classlist.find_one({'title':title_receive})
+    img_url = img_receive['img_url']
+    return render_template('board.html', title = title_receive,img_url=img_url)
 
 @app.route('/readBoard', methods=['get'])
 def read_review():
     title_receive = request.args.get('title')
-    review_list = list(db.review.find({'title':title_receive}, {'_id': False}))
-    return jsonify({'review_list': review_list, 'result': 'success'})
+    mongo_list = db.review.find({'title':title_receive})
+    sec_id = []
+    for id_list in mongo_list:
+        id_list['_id'] = str(id_list['_id'])
+        sec_id.append(id_list)
 
+    review_list = list(db.review.find({'title':title_receive}, {'_id': False}))
+    return jsonify({'review_list': review_list,'sec_id':sec_id, 'result': 'success'})
+
+@app.route('/deleteBoard', methods=['POST'])
+def delete_review():
+
+    id_receive = request.form["id_give"]
+    db.review.delete_one({'_id': ObjectId(id_receive)})
+    return jsonify({'result': 'success'})
+
+@app.route('/updateBoard', methods=['POST'])
+def update_review():
+    id_receive = request.form["id_give"]
+    review_receive = request.form["review_give"]
+    db.review.update_one({'_id': ObjectId(id_receive)}, {'$set': {'review': review_receive}})
+    return jsonify({'result': 'success'})
 
 @app.route('/writeBoard', methods=['POST'])
 def write_review():

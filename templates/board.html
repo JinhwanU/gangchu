@@ -20,7 +20,7 @@
     </script>
     <body>
     <p style="display: none" id="title">{{ title }}</p>
-    <h2 class="align-right font2">{{ title }} 리뷰</h2>
+    <h2 class="align-center font2"><img src ="{{ img_url }}" style="height: 200px;height: 200px;" > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ title }} 리뷰</h2>
     <button type="button" class="btn btn-secondary btn-sm font2" style="font-size: 20px" onclick="openClose()">리뷰작성
     </button>
     <br>
@@ -43,5 +43,6 @@
         </button>
     </div><br>
     <div id="add_review">
+
     </div>
 {% endblock %}
