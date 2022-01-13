@@ -20,9 +20,10 @@ from pymongo import MongoClient
 client = MongoClient('localhost', 27017)
 db = client.gangchu
 
-#평점평균 값 추가해주기
+
+# 평점평균 값 추가해주기
 def gi(name):
-    temp = list(db.review.find({'title':name},))
+    temp = list(db.review.find({'title': name}, ))
     cnt = 0;
     for i in temp:
         rating = int(i['rating'])
@@ -30,17 +31,21 @@ def gi(name):
     if cnt == 0:
         aver = '없음'
     else:
-        aver =round(cnt / len(temp),2)
-    db.classlist.update_one({'title': name}, {'$set':{"aver":aver} },False,True)
+        aver = round(cnt / len(temp), 2)
+    db.classlist.update_one({'title': name}, {'$set': {"aver": aver}}, False, True)
 
 
 # HTML 화면 보여주기
 @app.route('/')
 def home():
-    #평점평균 입력
+    # 평점평균 입력
     temp = list(db.classlist.find({}))
+    temp1 = list(db.seoulacademy.find({}))
     for h in temp:
         insert = h['title']
+        gi(insert);
+    for h in temp1:
+        insert = h['name']
         gi(insert);
     # 로그인 확인
     token_receive = request.cookies.get('mytoken')
@@ -57,46 +62,61 @@ def home():
     return render_template('main.html')
 
 
-@app.route('/readList', methods=['GET'])
-def read_list():
+@app.route('/readClass', methods=['GET'])
+def read_ClassList():
     class_list = list(db.classlist.find({}, {'_id': False}))
     return jsonify({'result': 'success', 'class_list': class_list})
+
+@app.route('/readAcademy', methods=['GET'])
+def read_AcademyList():
+    academy_list = list(db.seoulacademy.find({}, {'_id': False}))
+    return jsonify({'result': 'success', 'academy_list': academy_list})
 
 
 @app.route('/map')
 def route_map():
     return render_template('map.html')
 
-#클릭한 강의리뷰 보러이동
-@app.route('/board', methods=['get'])
-def route_board():
-    title_receive = request.args.get('title')
-    img_receive = db.classlist.find_one({'title':title_receive})
-    img_url = img_receive['img_url']
-    return render_template('board.html', title = title_receive,img_url=img_url)
 
-#클릭한 강의리뷰출력
+# 클릭한 강의리뷰 보러이동
+@app.route('/boardclass', methods=['get'])
+def route_Cboard():
+    title_receive = request.args.get('title')
+    img_receive = db.classlist.find_one({'title': title_receive})
+    img_url = img_receive['img_url']
+    return render_template('board.html', title=title_receive, img_url=img_url)
+
+@app.route('/boardacademy', methods=['get'])
+def route_Aboard():
+    title_receive = request.args.get('title')
+    img_receive = db.seoulacademy.find_one({'name': title_receive})
+    img_url = img_receive['img_url']
+    return render_template('board.html', title=title_receive, img_url=img_url)
+
+
+# 클릭한 강의리뷰출력
 @app.route('/readBoard', methods=['get'])
 def read_review():
     title_receive = request.args.get('title')
-    mongo_list = db.review.find({'title':title_receive})
+    mongo_list = db.review.find({'title': title_receive})
     sec_id = []
     for id_list in mongo_list:
         id_list['_id'] = str(id_list['_id'])
         sec_id.append(id_list)
 
-    review_list = list(db.review.find({'title':title_receive}, {'_id': False}))
-    return jsonify({'review_list': review_list,'sec_id':sec_id, 'result': 'success'})
+    review_list = list(db.review.find({'title': title_receive}, {'_id': False}))
+    return jsonify({'review_list': review_list, 'sec_id': sec_id, 'result': 'success'})
 
-#선택한 리뷰삭제
+
+# 선택한 리뷰삭제
 @app.route('/deleteBoard', methods=['POST'])
 def delete_review():
-
     id_receive = request.form["id_give"]
     db.review.delete_one({'_id': ObjectId(id_receive)})
     return jsonify({'result': 'success'})
 
-#선택한 리뷰수정
+
+# 선택한 리뷰수정
 @app.route('/updateBoard', methods=['POST'])
 def update_review():
     id_receive = request.form["id_give"]
@@ -104,7 +124,8 @@ def update_review():
     db.review.update_one({'_id': ObjectId(id_receive)}, {'$set': {'review': review_receive}})
     return jsonify({'result': 'success'})
 
-#리뷰작성
+
+# 리뷰작성
 @app.route('/writeBoard', methods=['POST'])
 def write_review():
     id_receive = request.form["id_give"]
