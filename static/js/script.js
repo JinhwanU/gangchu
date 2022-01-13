@@ -152,7 +152,6 @@ function showReview(num) {
                 let sec_id = response['sec_id'][num]['_id']
                 let review = response['review_list'][num]
                 let id_rec = review['id']
-                let tiile_rec = review['title']
                 let rating_rec = review['rating']
                 let review_rec = review['review']
                 let html = `<div class="row g-3 board_wrap font3">
@@ -192,7 +191,7 @@ function showReview(num) {
 function showClass(num) {
     $.ajax({
         type: 'GET',
-        url: '/readList',
+        url: '/readClass',
         data: {},
         success: function (response) {
             if (response['result'] == 'success') {
@@ -210,17 +209,55 @@ function showClass(num) {
         <p class="card-title" ><b>${list['title']}</b></p>
         <p><small class="card-text">${list['text']}</small></p>
         <div class="card-text"><small class="text-muted">평점 : ${list['aver']}</small></div>
-        <button onclick="location.href='/board?title=${list["title"]}'" class="font2 btn btn-outline-primary" style="font-size: 20px">리뷰보러가기</button>
+        <button onclick="location.href='/boardclass?title=${list["title"]}'" class="font2 btn btn-outline-primary" style="font-size: 20px">리뷰보러가기</button>
         <br>
       </div>
     </div>
   </div>
 </div>`
                 $('#class-box').append(temphtml)
-            } else {
-                return 'a'
+
             }
         }
 
+    });
+}
+
+function showAcademy(num) {
+    $.ajax({
+        type: 'GET',
+        url: '/readAcademy',
+        data: {},
+        success: function (response) {
+            if (response['result'] == 'success') {
+                let academylist = response['academy_list']
+                let list = academylist[num]
+                let tempimg;
+                if (!list['imgsrc']) {
+                    tempimg = '../static/rtan.png'
+                } else {
+                    tempimg = list['imgsrc']
+                }
+
+                let temphtml = `<div class="card mb-3 class-card font1 " style="border-radius: 12px">
+<div class="row g-0 align-left" >
+    <div class="col-md-4">
+    <img src="${tempimg}" class="img-fluid rounded-start img_px" alt="...">   
+       </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <p class="card-title" ><b>${list['name']}</b></p>
+        <p><small class="card-text">${list['address']}</small></p>
+        <div class="card-text"><small class="text-muted">평점 : ${list['aver']}</small></div>
+        <button onclick="location.href='/boardacademy?title=${list["name"]}'" class="font2 btn btn-outline-primary" style="font-size: 20px">리뷰보러가기</button>
+        <br>
+      </div>
+    </div>
+  </div>
+</div>`
+                $('#class-box').append(temphtml)
+
+            }
+        }
     });
 }

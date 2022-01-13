@@ -57,10 +57,15 @@ def home():
     return render_template('main.html')
 
 
-@app.route('/readList', methods=['GET'])
-def read_list():
+@app.route('/readClass', methods=['GET'])
+def read_ClassList():
     class_list = list(db.classlist.find({}, {'_id': False}))
     return jsonify({'result': 'success', 'class_list': class_list})
+
+@app.route('/readAcademy', methods=['GET'])
+def read_AcademyList():
+    academy_list = list(db.academy.find({}, {'_id': False}))
+    return jsonify({'result': 'success', 'academy_list': academy_list})
 
 
 @app.route('/map')
@@ -68,10 +73,28 @@ def route_map():
     return render_template('map.html')
 
 #클릭한 강의리뷰 보러이동
-@app.route('/board', methods=['get'])
+@app.route('/boardclass', methods=['get'])
 def route_board():
     title_receive = request.args.get('title')
     img_receive = db.classlist.find_one({'title': title_receive})
+    img_url = img_receive['img_url']
+
+    token_receive = request.cookies.get('mytoken')
+    if token_receive:
+        try:
+            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+            user_info = db.users.find_one({"id": payload["id"]})
+            return render_template('board.html', title=title_receive, img_url=img_url,user_info=user_info)
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for("home", msg="로그인 시간이 만료되었습니다."))
+        except jwt.exceptions.DecodeError:
+            return redirect(url_for("home", msg="로그인 정보가 존재하지 않습니다."))
+    return render_template('board.html', title = title_receive,img_url=img_url)
+
+@app.route('/boardacademy', methods=['get'])
+def route_Aboard():
+    title_receive = request.args.get('title')
+    img_receive = db.academy.find_one({'title': title_receive})
     img_url = img_receive['img_url']
 
     token_receive = request.cookies.get('mytoken')

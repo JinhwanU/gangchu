@@ -35,20 +35,28 @@
                 let cnt = 0;
                 for (; cnt < 6; cnt++) {
                     showClass(cnt)
+                    showAcademy(cnt)
                 }
                 $(document).scroll(function () {
                     let maxHeight = $(document).height();
                     let currentScroll = $(window).scrollTop() + $(window).height();
                     if (maxHeight <= currentScroll + 100) {
                         showClass(cnt)
-                        if (showClass(cnt) != 'a') {
+                        showAcademy(cnt)
                             cnt++;
-                        }
-                        console.log(showClass(cnt))
+
                     }
                 })
             }
         )
+        function online(){
+            $('#class-box').css('display','')
+            $('#academy-box').css('display','none')
+        }
+        function  offline(){
+            $('#class-box').css('display','none')
+            $('#academy-box').css('display','')
+        }
     </script>
     {#    강의 담는 리스트#}
     <div style="max-width: 540px; display: block" class="align-center wrapper" id="class-box">
