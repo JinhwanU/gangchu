@@ -20,9 +20,10 @@ from pymongo import MongoClient
 client = MongoClient('localhost', 27017)
 db = client.gangchu
 
-#평점평균 값 추가해주기
+
+# 평점평균 값 추가해주기
 def gi(name):
-    temp = list(db.review.find({'title':name},))
+    temp = list(db.review.find({'title': name}, ))
     cnt = 0;
     for i in temp:
         rating = int(i['rating'])
@@ -30,11 +31,12 @@ def gi(name):
     if cnt == 0:
         aver = '없음'
     else:
-        aver =round(cnt / len(temp),2)
-    db.classlist.update_one({'title': name}, {'$set':{"aver":aver} },False,True)
+        aver = round(cnt / len(temp), 2)
+    db.classlist.update_one({'title': name}, {'$set': {"aver": aver}}, False, True)
+
 
 def gi2(name):
-    temp = list(db.review.find({'title':name},))
+    temp = list(db.review.find({'title': name}, ))
     cnt = 0;
     for i in temp:
         rating = int(i['rating'])
@@ -42,21 +44,22 @@ def gi2(name):
     if cnt == 0:
         aver = '없음'
     else:
-        aver =round(cnt / len(temp),2)
-    db.academy.update_one({'title': name}, {'$set':{"aver":aver} },False,True)
+        aver = round(cnt / len(temp), 2)
+    db.academy.update_one({'title': name}, {'$set': {"aver": aver}}, False, True)
 
 
 # HTML 화면 보여주기
 @app.route('/')
 def home():
-    #평점평균 입력
+    # 평점평균 입력
     temp = list(db.classlist.find({}))
     temp1 = list(db.academy.find({}))
     for h in temp:
+        print(h)
         insert = h['title']
         gi(insert);
     for h in temp1:
-        insert = h['title']
+        insert = h['name']
         gi2(insert);
     # 로그인 확인
     token_receive = request.cookies.get('mytoken')
@@ -78,6 +81,7 @@ def read_ClassList():
     class_list = list(db.classlist.find({}, {'_id': False}))
     return jsonify({'result': 'success', 'class_list': class_list})
 
+
 @app.route('/readAcademy', methods=['GET'])
 def read_AcademyList():
     academy_list = list(db.academy.find({}, {'_id': False}))
@@ -88,7 +92,8 @@ def read_AcademyList():
 def route_map():
     return render_template('map.html')
 
-#클릭한 강의리뷰 보러이동
+
+# 클릭한 강의리뷰 보러이동
 @app.route('/boardclass', methods=['get'])
 def route_board():
     title_receive = request.args.get('title')
@@ -100,17 +105,18 @@ def route_board():
         try:
             payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
             user_info = db.users.find_one({"id": payload["id"]})
-            return render_template('board.html', title=title_receive, img_url=img_url,user_info=user_info)
+            return render_template('board.html', title=title_receive, img_url=img_url, user_info=user_info)
         except jwt.ExpiredSignatureError:
             return redirect(url_for("home", msg="로그인 시간이 만료되었습니다."))
         except jwt.exceptions.DecodeError:
             return redirect(url_for("home", msg="로그인 정보가 존재하지 않습니다."))
-    return render_template('board.html', title = title_receive,img_url=img_url)
+    return render_template('board.html', title=title_receive, img_url=img_url)
+
 
 @app.route('/boardacademy', methods=['get'])
 def route_Aboard():
     title_receive = request.args.get('title')
-    img_receive = db.academy.find_one({'title': title_receive})
+    img_receive = db.academy.find_one({'name': title_receive})
     img_url = img_receive['img_url']
 
     token_receive = request.cookies.get('mytoken')
@@ -118,35 +124,37 @@ def route_Aboard():
         try:
             payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
             user_info = db.users.find_one({"id": payload["id"]})
-            return render_template('board.html', title=title_receive, img_url=img_url,user_info=user_info)
+            return render_template('board.html', title=title_receive, img_url=img_url, user_info=user_info)
         except jwt.ExpiredSignatureError:
             return redirect(url_for("home", msg="로그인 시간이 만료되었습니다."))
         except jwt.exceptions.DecodeError:
             return redirect(url_for("home", msg="로그인 정보가 존재하지 않습니다."))
-    return render_template('board.html', title = title_receive,img_url=img_url)
+    return render_template('board.html', title=title_receive, img_url=img_url)
 
-#클릭한 강의리뷰출력
+
+# 클릭한 강의리뷰출력
 @app.route('/readBoard', methods=['get'])
 def read_review():
     title_receive = request.args.get('title')
-    mongo_list = db.review.find({'title':title_receive})
+    mongo_list = db.review.find({'title': title_receive})
     sec_id = []
     for id_list in mongo_list:
         id_list['_id'] = str(id_list['_id'])
         sec_id.append(id_list)
 
-    review_list = list(db.review.find({'title':title_receive}, {'_id': False}))
-    return jsonify({'review_list': review_list,'sec_id':sec_id, 'result': 'success'})
+    review_list = list(db.review.find({'title': title_receive}, {'_id': False}))
+    return jsonify({'review_list': review_list, 'sec_id': sec_id, 'result': 'success'})
 
-#선택한 리뷰삭제
+
+# 선택한 리뷰삭제
 @app.route('/deleteBoard', methods=['POST'])
 def delete_review():
-
     id_receive = request.form["id_give"]
     db.review.delete_one({'_id': ObjectId(id_receive)})
     return jsonify({'result': 'success'})
 
-#선택한 리뷰수정
+
+# 선택한 리뷰수정
 @app.route('/updateBoard', methods=['POST'])
 def update_review():
     id_receive = request.form["id_give"]
@@ -154,7 +162,8 @@ def update_review():
     db.review.update_one({'_id': ObjectId(id_receive)}, {'$set': {'review': review_receive}})
     return jsonify({'result': 'success'})
 
-#리뷰작성
+
+# 리뷰작성
 @app.route('/writeBoard', methods=['POST'])
 def write_review():
     id_receive = request.form["id_give"]

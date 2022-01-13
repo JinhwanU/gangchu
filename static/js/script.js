@@ -246,16 +246,16 @@ function showAcademy(num) {
        </div>
     <div class="col-md-8">
       <div class="card-body">
-        <p class="card-title" ><b>${list['name']}</b></p>
+        <p class="card-title" ><b>${list['title']}</b></p>
         <p><small class="card-text">${list['address']}</small></p>
         <div class="card-text"><small class="text-muted">평점 : ${list['aver']}</small></div>
-        <button onclick="location.href='/boardacademy?title=${list["name"]}'" class="font2 btn btn-outline-primary" style="font-size: 20px">리뷰보러가기</button>
+        <button onclick="location.href='/boardacademy?title=${list["title"]}'" class="font2 btn btn-outline-primary" style="font-size: 20px">리뷰보러가기</button>
         <br>
       </div>
     </div>
   </div>
 </div>`
-                $('#class-box').append(temphtml)
+                $('#academy-box').append(temphtml)
 
             }
         }
