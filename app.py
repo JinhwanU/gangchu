@@ -33,15 +33,31 @@ def gi(name):
         aver =round(cnt / len(temp),2)
     db.classlist.update_one({'title': name}, {'$set':{"aver":aver} },False,True)
 
+def gi2(name):
+    temp = list(db.review.find({'title':name},))
+    cnt = 0;
+    for i in temp:
+        rating = int(i['rating'])
+        cnt += rating
+    if cnt == 0:
+        aver = '없음'
+    else:
+        aver =round(cnt / len(temp),2)
+    db.academy.update_one({'title': name}, {'$set':{"aver":aver} },False,True)
+
 
 # HTML 화면 보여주기
 @app.route('/')
 def home():
     #평점평균 입력
     temp = list(db.classlist.find({}))
+    temp1 = list(db.academy.find({}))
     for h in temp:
         insert = h['title']
         gi(insert);
+    for h in temp1:
+        insert = h['title']
+        gi2(insert);
     # 로그인 확인
     token_receive = request.cookies.get('mytoken')
     if token_receive:
