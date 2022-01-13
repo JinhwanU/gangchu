@@ -90,46 +90,48 @@ function writeReview() {
     })
 }
 
-function updateReview(id){
+
+function updateReview(id) {
+
+
     let update_review = prompt("리뷰를 수정해주세요")
     {
         $.ajax({
-        type: "POST",
-        url: "/updateBoard",
-        data: {
-            id_give: id,
-            review_give: update_review.toLowerCase(),
-        },
-        success: function (response) { // 성공하면
-            if (response["result"] == "success") {
-                window.location.reload()
+            type: "POST",
+            url: "/updateBoard",
+            data: {
+                id_give: id,
+                review_give: update_review,
+            },
+            success: function (response) { // 성공하면
+                if (response["result"] == "success") {
+                    window.location.reload()
+                }
             }
-        }
-    })
+        })
     }
 
 }
 
-function deleteReview(id){
-    if(confirm("리뷰를 삭제하시겠습니까?")==true)
-    {
+function deleteReview(id) {
+    if (confirm("리뷰를 삭제하시겠습니까?") == true) {
         $.ajax({
-        type: "POST",
-        url: "/deleteBoard",
-        data: {
-            id_give: id
-        },
-        success: function (response) { // 성공하면
-            if (response["result"] == "success") {
-                window.location.reload()
+            type: "POST",
+            url: "/deleteBoard",
+            data: {
+                id_give: id
+            },
+            success: function (response) { // 성공하면
+                if (response["result"] == "success") {
+                    window.location.reload()
+                }
             }
-        }
-    })
+        })
     }
 
 }
 
-function showreview(num) {
+function showReview(num) {
     let title = $('#title').text()
     $.ajax({
         type: "GET",
@@ -152,8 +154,8 @@ function showreview(num) {
         <p  style="width: 100px"> 평점 : ${rating_rec}/5 </p>
     </div>
     <div class="col-md-2">
-    <button class="btn btn-outline-dark btn-sm font1" onclick="updateReview('${sec_id}')">수정</button>
-    &nbsp&nbsp&nbsp
+    <button class="btn btn-outline-dark btn-sm font1" onclick="updateReview('${sec_id}')">수정</button> 
+     &nbsp&nbsp&nbsp
     <button class="btn btn-outline-dark btn-sm font1" onclick="deleteReview('${sec_id}')">삭제</button>
     </div>
     <div class="col-12">
@@ -201,6 +203,8 @@ function showClass(num) {
   </div>
 </div>`
                 $('#class-box').append(temphtml)
+            } else {
+                return 'a'
             }
         }
 

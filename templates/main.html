@@ -27,10 +27,12 @@
                 $(document).scroll(function () {
                     let maxHeight = $(document).height();
                     let currentScroll = $(window).scrollTop() + $(window).height();
-                    let title = $('#title').text()
                     if (maxHeight <= currentScroll + 100) {
                         showClass(cnt)
-                        cnt++;
+                        if(showClass(cnt) != 'a'){
+                            cnt++;
+                        }
+                        console.log(showClass(cnt))
                     }
                 })
             }

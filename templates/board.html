@@ -4,13 +4,13 @@
         $(document).ready(function () {
                 let cnt = 0;
                 for (; cnt < 6; cnt++) {
-                    showreview(cnt)
+                    showReview(cnt)
                 }
                 $(document).scroll(function () {
                     let maxHeight = $(document).height();
                     let currentScroll = $(window).scrollTop() + $(window).height();
                     if (maxHeight <= currentScroll + 100) {
-                        showreview(cnt)
+                        showReview(cnt)
                         cnt++;
                     }
                 })
@@ -20,7 +20,8 @@
     </script>
     <body>
     <p style="display: none" id="title">{{ title }}</p>
-    <h2 class="align-center font2"><img src ="{{ img_url }}" style="height: 200px;height: 200px;" > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ title }} 리뷰</h2>
+    <h2 class="align-center font2"><img src="{{ img_url }}" style="height: 200px;height: 200px;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ title }}
+        리뷰</h2>
     <button type="button" class="btn btn-secondary btn-sm font2" style="font-size: 20px" onclick="openClose()">리뷰작성
     </button>
     <br>
@@ -41,9 +42,8 @@
         <br>
         <div style="display: block" class="align-right">
             <button type="button" class="btn btn-secondary font2" style="font-size: 20px;" onclick="writeReview()">제출
-        </button>
+            </button>
         </div>
-
     </div><br>
 
     <div id="add_review">
