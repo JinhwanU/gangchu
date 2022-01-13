@@ -1,15 +1,20 @@
 {% extends 'index.html' %}
 {% block content %}
-
+    {% if not user_info %}
+        <script>
+            document.cookie = "mytoken={{ token }}";
+            window.location.href = "/"
+        </script>
+    {% endif %}
     {# flash 메세지 전달 받으면 alert 띄우기 #}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <script>
-                alert("{{messages[-1]}}")
+                alert("{{ messages[-1] }}")
             </script>
         {% endif %}
     {% endwith %}
-<style>
+    <style>
         .cat {
             height: 190px;
             width: 190px;
@@ -59,8 +64,14 @@
     </script>
 
     <h1> 메인페이지</h1>
-   <div class="card mb-3" style="max-width: 540px;" id="class-box">
+    {% if user_info %}
+        <p>{{ user_info.id }}님 환영합니다.</p>
+    {% endif %}
+    <div class="card mb-3" style="max-width: 540px;" id="class-box">
 
-</div>
+    </div>
 
 {% endblock %}
+
+
+

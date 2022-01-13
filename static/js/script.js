@@ -4,7 +4,7 @@ function main() {
         url: "/",
         data: {},
         success: function (response) {
-            location.href = "/"
+            window.location.href = "/"
         }
     })
 }
@@ -15,7 +15,7 @@ function map() {
         url: "/map",
         data: {},
         success: function (response) {
-            location.href = "/map"
+            window.location.href = "/map"
         }
     })
 }
@@ -26,7 +26,7 @@ function board() {
         url: "/board",
         data: {},
         success: function (response) {
-            location.href = "/board"
+            window.location.href = "/board"
         }
     })
 }
@@ -48,7 +48,7 @@ function login() {
         url: "/login",
         data: {},
         success: function (response) {
-            location.href = "/login"
+            window.location.href = "/login"
         }
     })
 }
@@ -59,8 +59,17 @@ function signup() {
         url: "/login/signup",
         data: {},
         success: function (response) {
-            location.href = "/login/signup"
-            // 회원가입 버튼을 눌렀을 때 login.html에 login_form='signup' 변수를 보내고 불러오기
+            window.location.href = "/login/signup"
         }
     })
+}
+
+function logout() {
+    let date = new Date();
+    date.setDate(date.getDate() - 100);
+    let Cookie = `${name}=;Expires=${date.toUTCString()}`
+    document.cookie = Cookie;
+
+    alert('로그아웃!')
+    window.location.href = "/login"
 }
