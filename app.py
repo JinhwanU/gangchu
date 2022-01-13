@@ -23,16 +23,28 @@ db = client.gangchu
 
 # 평점평균 값 추가해주기
 def gi(name):
-    temp = list(db.review.find({'title': name}, ))
+    temp1 = list(db.review.find({'title': name}, ))
     cnt = 0;
-    for i in temp:
+    for i in temp1:
         rating = int(i['rating'])
         cnt += rating
     if cnt == 0:
         aver = '없음'
     else:
-        aver = round(cnt / len(temp), 2)
+        aver = round(cnt / len(temp1), 2)
     db.classlist.update_one({'title': name}, {'$set': {"aver": aver}}, False, True)
+
+def gi2(name):
+    temp2 = list(db.review.find({'title': name}, ))
+    cnt = 0;
+    for i in temp2:
+        rating = int(i['rating'])
+        cnt += rating
+    if cnt == 0:
+        aver = '없음'
+    else:
+        aver = round(cnt / len(temp2), 2)
+    db.academy.update_one({'title': name}, {'$set': {"aver": aver}}, False, True)
 
 
 # HTML 화면 보여주기
@@ -40,13 +52,13 @@ def gi(name):
 def home():
     # 평점평균 입력
     temp = list(db.classlist.find({}))
-    temp1 = list(db.seoulacademy.find({}))
+    temp1 = list(db.academy.find({}))
     for h in temp:
         insert = h['title']
         gi(insert);
     for h in temp1:
-        insert = h['name']
-        gi(insert);
+        insert = h['title']
+        gi2(insert);
     # 로그인 확인
     token_receive = request.cookies.get('mytoken')
     if token_receive:
@@ -69,7 +81,7 @@ def read_ClassList():
 
 @app.route('/readAcademy', methods=['GET'])
 def read_AcademyList():
-    academy_list = list(db.seoulacademy.find({}, {'_id': False}))
+    academy_list = list(db.academy.find({}, {'_id': False}))
     return jsonify({'result': 'success', 'academy_list': academy_list})
 
 
@@ -89,7 +101,7 @@ def route_Cboard():
 @app.route('/boardacademy', methods=['get'])
 def route_Aboard():
     title_receive = request.args.get('title')
-    img_receive = db.seoulacademy.find_one({'name': title_receive})
+    img_receive = db.academy.find_one({'name': title_receive})
     img_url = img_receive['img_url']
     return render_template('board.html', title=title_receive, img_url=img_url)
 
