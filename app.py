@@ -20,6 +20,7 @@ from pymongo import MongoClient
 client = MongoClient('localhost', 27017)
 db = client.gangchu
 
+#평점평균 값 추가해주기
 def gi(name):
     temp = list(db.review.find({'title':name},))
     cnt = 0;
@@ -41,7 +42,7 @@ def home():
     for h in temp:
         insert = h['title']
         gi(insert);
-    # return render_template('main.html')
+    # 로그인 확인
     token_receive = request.cookies.get('mytoken')
     if token_receive:
         try:
@@ -66,7 +67,7 @@ def read_list():
 def route_map():
     return render_template('map.html')
 
-
+#클릭한 강의리뷰 보러이동
 @app.route('/board', methods=['get'])
 def route_board():
     title_receive = request.args.get('title')
@@ -74,6 +75,7 @@ def route_board():
     img_url = img_receive['img_url']
     return render_template('board.html', title = title_receive,img_url=img_url)
 
+#클릭한 강의리뷰출력
 @app.route('/readBoard', methods=['get'])
 def read_review():
     title_receive = request.args.get('title')
@@ -86,6 +88,7 @@ def read_review():
     review_list = list(db.review.find({'title':title_receive}, {'_id': False}))
     return jsonify({'review_list': review_list,'sec_id':sec_id, 'result': 'success'})
 
+#선택한 리뷰삭제
 @app.route('/deleteBoard', methods=['POST'])
 def delete_review():
 
@@ -93,6 +96,7 @@ def delete_review():
     db.review.delete_one({'_id': ObjectId(id_receive)})
     return jsonify({'result': 'success'})
 
+#선택한 리뷰수정
 @app.route('/updateBoard', methods=['POST'])
 def update_review():
     id_receive = request.form["id_give"]
@@ -100,9 +104,9 @@ def update_review():
     db.review.update_one({'_id': ObjectId(id_receive)}, {'$set': {'review': review_receive}})
     return jsonify({'result': 'success'})
 
+#리뷰작성
 @app.route('/writeBoard', methods=['POST'])
 def write_review():
-    # 1. 클라이언트로부터 데이터를 받기
     id_receive = request.form["id_give"]
     rating_receive = request.form["rating_give"]
     review_receive = request.form["review_give"]
