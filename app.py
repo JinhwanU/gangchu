@@ -3,7 +3,7 @@ import hashlib
 import jwt
 from datetime import datetime, timedelta
 from flask import Flask, render_template, jsonify, request, flash, redirect, url_for
-
+from bson.objectid import ObjectId
 from forms import LoginForm, SignupForm
 
 app = Flask(__name__)
@@ -20,10 +20,27 @@ from pymongo import MongoClient
 client = MongoClient('localhost', 27017)
 db = client.gangchu
 
+def gi(name):
+    temp = list(db.review.find({'title':name},))
+    cnt = 0;
+    for i in temp:
+        rating = int(i['rating'])
+        cnt += rating
+    if cnt == 0:
+        aver = '없음'
+    else:
+        aver =round(cnt / len(temp),2)
+    db.classlist.update_one({'title': name}, {'$set':{"aver":aver} },False,True)
+
 
 # HTML 화면 보여주기
 @app.route('/')
 def home():
+    #평점평균 입력
+    temp = list(db.classlist.find({}))
+    for h in temp:
+        insert = h['title']
+        gi(insert);
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
@@ -48,12 +65,38 @@ def route_map():
     return render_template('map.html')
 
 
-@app.route('/board')
+@app.route('/board', methods=['get'])
 def route_board():
     title_receive = request.args.get('title')
-    review_list = list(db.review.find({'title': title_receive}, {'_id': False}))
-    return render_template('board.html', review_list=review_list, title=title_receive)
+    img_receive = db.classlist.find_one({'title':title_receive})
+    img_url = img_receive['img_url']
+    return render_template('board.html', title = title_receive,img_url=img_url)
 
+@app.route('/readBoard', methods=['get'])
+def read_review():
+    title_receive = request.args.get('title')
+    mongo_list = db.review.find({'title':title_receive})
+    sec_id = []
+    for id_list in mongo_list:
+        id_list['_id'] = str(id_list['_id'])
+        sec_id.append(id_list)
+
+    review_list = list(db.review.find({'title':title_receive}, {'_id': False}))
+    return jsonify({'review_list': review_list,'sec_id':sec_id, 'result': 'success'})
+
+@app.route('/deleteBoard', methods=['POST'])
+def delete_review():
+
+    id_receive = request.form["id_give"]
+    db.review.delete_one({'_id': ObjectId(id_receive)})
+    return jsonify({'result': 'success'})
+
+@app.route('/updateBoard', methods=['POST'])
+def update_review():
+    id_receive = request.form["id_give"]
+    review_receive = request.form["review_give"]
+    db.review.update_one({'_id': ObjectId(id_receive)}, {'$set': {'review': review_receive}})
+    return jsonify({'result': 'success'})
 
 @app.route('/writeBoard', methods=['POST'])
 def write_review():
