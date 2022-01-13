@@ -1,4 +1,4 @@
-# gangchu
+# STUDY STARTER
 
 스파르타 코딩클럽 강의 평가 및 리뷰와 오프라인 코딩학원의 리뷰를 공유합니다.
 
@@ -9,7 +9,9 @@
 
 
 유진환 - JWT 로그인 + 마이페이지 + jinja2관련 ( login/signup/mypage.html)
+
 이기녕 - 네이버지도 + 크롤링(셀레니움사용-네이버지도 이용한 학원 정보 크롤링) (map.html)
+
 조상현 - 리뷰게시판 + 크롤링(스파르타 코딩클럽) (main/board.html)
 
 
@@ -25,7 +27,6 @@
    - jwt
 - `Frontend`
    - jinja
-   - bulma
    - bootstrap
 - `DB`
    - MongoDB
