@@ -31,7 +31,32 @@ def read_list():
 def route_map():
     return render_template('map.html')
 
+#############################################################
+###이기녕 app.py
 
+@app.route('/api/maplist', methods=["GET"])
+def get_map():
+    # 학원 목록을 반환하는 API
+    # 1. 데이터 베이스에서 학원 목록을 꺼내와야 한다.
+    aca_list = list(db.shops.find({}, {'_id': False}))
+    # aca_list 라는 키 값에 학원 목록을 담아 클라이언트에게 반환합니다.
+    # 2. 그걸 클라이언트에 돌려준다
+    return jsonify({'result': 'success', 'aca_list': aca_list})
+
+@app.route('/like_academy', methods=["POST"])
+def like_aca():
+    title_receive = request.form["title_give"]
+    address_receive = request.form["address_give"]
+    action_receive = request.form["action_give"]
+    print(title_receive, address_receive, action_receive)
+
+    if action_receive == "like":
+        db.shops.update_one({"title": title_receive, "address": address_receive}, {"$set": {"liked": True}})
+    else:
+        db.shops.update_one({"title": title_receive, "address": address_receive}, {"$unset": {"liked": False}})
+    return jsonify({'result': 'success'})
+
+#############################################################
 @app.route('/board')
 def route_board():
     title_receive = request.args.get('title')
