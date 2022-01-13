@@ -131,11 +131,6 @@ def write_review():
     return jsonify({'result': 'success'})
 
 
-@app.route('/mypage')
-def route_mypage():
-    return render_template('mypage.html')
-
-
 @app.route("/login", methods=["GET", "POST"])
 def route_login():
     # forms에 선언한 RegistrationForm클래스의 자식 객체 생성
