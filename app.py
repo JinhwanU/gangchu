@@ -3,7 +3,7 @@ import hashlib
 import jwt
 from datetime import datetime, timedelta
 from flask import Flask, render_template, jsonify, request, flash, redirect, url_for
-
+from bson.objectid import ObjectId
 from forms import LoginForm, SignupForm
 
 app = Flask(__name__)
@@ -20,21 +20,41 @@ from pymongo import MongoClient
 client = MongoClient('localhost', 27017)
 db = client.gangchu
 
+#평점평균 값 추가해주기
+def gi(name):
+    temp = list(db.review.find({'title':name},))
+    cnt = 0;
+    for i in temp:
+        rating = int(i['rating'])
+        cnt += rating
+    if cnt == 0:
+        aver = '없음'
+    else:
+        aver =round(cnt / len(temp),2)
+    db.classlist.update_one({'title': name}, {'$set':{"aver":aver} },False,True)
+
 
 # HTML 화면 보여주기
 @app.route('/')
 def home():
+    #평점평균 입력
+    temp = list(db.classlist.find({}))
+    for h in temp:
+        insert = h['title']
+        gi(insert);
+    # 로그인 확인
     token_receive = request.cookies.get('mytoken')
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.users.find_one({"id": payload["id"]})
-        # print(user_info)
-        return render_template('main.html', user_info=user_info)
-    except jwt.ExpiredSignatureError:
-        return redirect(url_for("route_login", msg="로그인 시간이 만료되었습니다."))
-    except jwt.exceptions.DecodeError:
-        return redirect(url_for("route_login", msg="로그인 정보가 존재하지 않습니다."))
-    # return render_template('main.html')
+    if token_receive:
+        try:
+            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+            user_info = db.users.find_one({"id": payload["id"]})
+            # print(user_info)
+            return render_template('main.html', user_info=user_info)
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for("home", msg="로그인 시간이 만료되었습니다."))
+        except jwt.exceptions.DecodeError:
+            return redirect(url_for("home", msg="로그인 정보가 존재하지 않습니다."))
+    return render_template('main.html')
 
 
 @app.route('/readList', methods=['GET'])
@@ -47,17 +67,46 @@ def read_list():
 def route_map():
     return render_template('map.html')
 
-
-@app.route('/board')
+#클릭한 강의리뷰 보러이동
+@app.route('/board', methods=['get'])
 def route_board():
     title_receive = request.args.get('title')
-    review_list = list(db.review.find({'title': title_receive}, {'_id': False}))
-    return render_template('board.html', review_list=review_list, title=title_receive)
+    img_receive = db.classlist.find_one({'title':title_receive})
+    img_url = img_receive['img_url']
+    return render_template('board.html', title = title_receive,img_url=img_url)
 
+#클릭한 강의리뷰출력
+@app.route('/readBoard', methods=['get'])
+def read_review():
+    title_receive = request.args.get('title')
+    mongo_list = db.review.find({'title':title_receive})
+    sec_id = []
+    for id_list in mongo_list:
+        id_list['_id'] = str(id_list['_id'])
+        sec_id.append(id_list)
 
+    review_list = list(db.review.find({'title':title_receive}, {'_id': False}))
+    return jsonify({'review_list': review_list,'sec_id':sec_id, 'result': 'success'})
+
+#선택한 리뷰삭제
+@app.route('/deleteBoard', methods=['POST'])
+def delete_review():
+
+    id_receive = request.form["id_give"]
+    db.review.delete_one({'_id': ObjectId(id_receive)})
+    return jsonify({'result': 'success'})
+
+#선택한 리뷰수정
+@app.route('/updateBoard', methods=['POST'])
+def update_review():
+    id_receive = request.form["id_give"]
+    review_receive = request.form["review_give"]
+    db.review.update_one({'_id': ObjectId(id_receive)}, {'$set': {'review': review_receive}})
+    return jsonify({'result': 'success'})
+
+#리뷰작성
 @app.route('/writeBoard', methods=['POST'])
 def write_review():
-    # 1. 클라이언트로부터 데이터를 받기
     id_receive = request.form["id_give"]
     rating_receive = request.form["rating_give"]
     review_receive = request.form["review_give"]

@@ -1,6 +1,17 @@
 .wrapper {
-    width: 1000px;
+    width: 900px;
     margin: 0 auto;
+}
+
+.align-center {
+    text-align: center;
+}
+
+.align-left {
+    text-align: left;
+}
+.align-right {
+    text-align: right;
 }
 
 .wrap-login {
@@ -8,4 +19,55 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.img_px {
+    height: 200px;
+    width: 200px;
+}
+
+.board_wrap {
+    width: 900px;
+    margin: auto;
+    padding: 10px;
+    border: solid;
+    border-width: 1px;
+    border-radius: 5px;
+}
+
+.board_border {
+    border: groove lightgrey;
+    border-radius: 3px;
+}
+
+.class-card {
+    max-width: 540px;
+    max-height: 201px;
+
+}
+
+.font1 {
+    font-family: 'IBM Plex Sans KR', sans-serif;
+}
+.font2{
+    font-family: 'Nanum Pen Script', cursive;
+}
+.font3{
+    font-family: 'Noto Serif KR', serif;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 75px;
+  padding: 1rem;
+  color: white;
+  background: teal;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

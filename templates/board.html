@@ -1,87 +1,52 @@
 {% extends 'index.html' %}
 {% block content %}
-<style>
-        .board_wrap {
-            width: 900px;
-            margin: auto;
-            padding: 10px;
-            border: ridge;
-            border-radius: 5px;
-        }
-
-        .board_border {
-            border: groove lightgrey;
-            border-radius: 3px;
-        }
-    </style>
     <script>
-        function openClose() {
-            // id 값 post-box의 display 값이 flex 이면(= 눈에 보이면)
-            if ($('#post-box').css('display') == 'flex') {
-                // post-box를 가리고
-                $('#post-box').css('display','none');
-            } else {
-                // 아니면(눈에 보이지 않으면) post-box를 펴라
-                $('#post-box').css('display','');
-                // 다시 버튼을 클릭하면, 박스 닫기를 할 수 있게 텍스트 바꿔두기
-            }
-        }
-        function writeReview(){
-            let id = $('#user_id').val()
-            let rating = $('#rating').val()
-            let review = $('#review').val()
-            let title = $('#title').text()
-            $.ajax({
-                type: "POST",
-                url: "/writeBoard",
-                data: {
-                    id_give: id, rating_give: rating,
-                    review_give: review, title_give: title,
-                },
-                success: function (response) { // 성공하면
-                    if (response["result"] == "success") {
-                        window.location.reload()
-                    }
+        $(document).ready(function () {
+                let cnt = 0;
+                for (; cnt < 6; cnt++) {
+                    showReview(cnt)
                 }
-            })
-        }
-    </script>
-<h1> 게시판 </h1>
-    <body>
-<p style="display: none" id="title">{{title}}</p>
-<button type="button" class="btn btn-secondary btn-sm" onclick="openClose()">리뷰작성</button>
-<div class="row g-3 board_wrap" id="post-box" style="display: none">
-    <div class="col-md-6">
-        <label for="user_id" class="form-label">아이디</label>
-        <input type="text" class="form-control" id="user_id" style="width: 200px">
-    </div>
-    <div class="col-md-6">
-        <label for="rating" class="form-label">평점</label>
-        <input type="number" class="form-control" id="rating" min="1" max="5" value="5" style="width: 50px">
-    </div>
-    <div class="col-12">
-        <label for="review" class="form-label">리뷰</label>
-        <textarea class="form-control" id="review" rows="3"> </textarea>
-    </div>
-    <button onclick="writeReview()">제출</button>
-</div>
-{#    진자를 이용해 플라스크에서 주어진 값으로 리뷰리스트를 만든다.#}
-<h2>{{title}}의 리뷰</h2>
+                $(document).scroll(function () {
+                    let maxHeight = $(document).height();
+                    let currentScroll = $(window).scrollTop() + $(window).height();
+                    if (maxHeight <= currentScroll + 100) {
+                        showReview(cnt)
+                        cnt++;
+                    }
+                })
+            }
+        )
 
-{% for i in review_list %}
-<div class="row g-3 board_wrap">
-    <div class="col-md-6">
-        <label for="user_id" class="form-label">아이디</label>
-        <p class="board_border" style="width: 200px"> {{i['id']}} </p>
+    </script>
+    <body>
+    <p style="display: none" id="title">{{ title }}</p>
+    <h2 class="align-center font2"><img src="{{ img_url }}" style="height: 200px;height: 200px;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ title }}
+        리뷰</h2>
+    <button type="button" class="btn btn-secondary btn-sm font2" style="font-size: 20px" onclick="openClose()">리뷰작성
+    </button>
+    <br>
+    {#    인풋박스 로그인시 나타남#}
+    <div class="row g-3 board_wrap" id="post-box" style="display: none">
+        <div class="col-md-6">
+            <label for="user_id" class="form-label">아이디</label>
+            <input type="text" class="form-control" id="user_id" style="width: 200px">
+        </div>
+        <div class="col-md-6">
+            <label for="rating" class="form-label">평점</label>
+            <input type="number" class="form-control" id="rating" min="1" max="5" value="5" style="width: 50px">
+        </div>
+        <div class="col-12">
+            <label for="review" class="form-label">리뷰</label>
+            <textarea class="form-control" id="review" rows="3"> </textarea>
+        </div>
+        <br>
+        <div style="display: block" class="align-right">
+            <button type="button" class="btn btn-secondary font2" style="font-size: 20px;" onclick="writeReview()">제출
+            </button>
+        </div>
+    </div><br>
+
+    <div id="add_review">
+
     </div>
-    <div class="col-md-6">
-        <label for="rating" class="form-label">평점</label>
-        <p class="board_border" style="width: 50px"> {{i['rating']}} </p>
-    </div>
-    <div class="col-12">
-        <label for="review" class="form-label">리뷰</label>
-        <p class="board_border"> {{i['review']}}<p/>
-    </div>
-</div>
-{% endfor%}
 {% endblock %}

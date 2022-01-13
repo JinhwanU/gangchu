@@ -1,77 +1,49 @@
 {% extends 'index.html' %}
 {% block content %}
-    {% if not user_info %}
-        <script>
-            document.cookie = "mytoken={{ token }}";
-            window.location.href = "/"
-        </script>
-    {% endif %}
+    <div class="align-center">
+        <img src="../static/study%20starter.png">
+        <h2 class="font3">코딩입문을 위한 강의리뷰<img src="../static/rtan.png" style="width: 50px;height: 50px"></h2>
+    </div>
+    <p class="btn-group align-center" style="display: block" role="group" aria-label="Basic outlined example">
+  <button type="button" class="btn btn-outline-dark" onclick="online()">스파르타 온라인 강의</button>
+  <button type="button" class="btn btn-outline-dark" onclick="offline()">오프라인 코딩 학원</button>
+
+</p>
     {# flash 메세지 전달 받으면 alert 띄우기 #}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <script>
-                alert("{{ messages[-1] }}")
+                alert("{{messages[-1]}}")
             </script>
         {% endif %}
     {% endwith %}
-    <style>
-        .cat {
-            height: 190px;
-            width: 190px;
-        }
-    </style>
     <script>
 
         $(document).ready(function () {
-            // index.html 로드가 완료되면 자동으로 showStar() 함수를 호출합니다.
-            showStar();
-        });
-
-        function showStar() {
-            $.ajax({
-                type: 'GET',
-                url: '/readList',
-                data: {},
-                success: function (response) {
-                    if (response['result'] == 'success') {
-                        let classlist = response['class_list']
-                        $('#star-box').empty()
-                        for (let i = 0; i < classlist.length; i++) {
-                            let list = classlist[i]
-                            let temphtml = `<div class="card mb-3" style="max-width: 540px;">
-<div class="row g-0">
-    <div class="col-md-4">
-      <img src="${list['img_url']}" class="img-fluid rounded-start cat" alt="...">
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <a href="${list['url']}" class="card-title">${list['title']}</a>
-        <p class="card-text">${list['text']}</p>
-        <p class="card-text"><small class="text-muted">평점</small></p>
-        <a href="/board?title=${list['title']}">리뷰보러가기</a>
-        <br>
-      </div>
-    </div>
-  </div>
-</div>`
-                            $('#class-box').append(temphtml)
-                        }
-                    }
+                let cnt = 0;
+                for (; cnt < 6; cnt++) {
+                    showClass(cnt)
                 }
-            });
-        }
-
+                $(document).scroll(function () {
+                    let maxHeight = $(document).height();
+                    let currentScroll = $(window).scrollTop() + $(window).height();
+                    if (maxHeight <= currentScroll + 100) {
+                        showClass(cnt)
+                        if(showClass(cnt) != 'a'){
+                            cnt++;
+                        }
+                        console.log(showClass(cnt))
+                    }
+                })
+            }
+        )
     </script>
+    {#    강의 담는 리스트#}
+    <div style="max-width: 540px; display: block" class="align-center wrapper" id="class-box">
 
-    <h1> 메인페이지</h1>
-    {% if user_info %}
-        <p>{{ user_info.id }}님 환영합니다.</p>
-    {% endif %}
-    <div class="card mb-3" style="max-width: 540px;" id="class-box">
+    </div>
+    <div style="max-width: 540px;display: none" class="align-center wrapper" id="academy">
 
     </div>
 
 {% endblock %}
-
-
-
