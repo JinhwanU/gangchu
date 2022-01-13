@@ -35,7 +35,7 @@
 
 ## 3. 실행화면
 
-https://youtu.be/QSCtSe8Kbl4
+https://youtu.be/Rv5DsasdGXI
 
 ## 4. 핵심기능
 
