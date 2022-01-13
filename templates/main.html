@@ -1,14 +1,26 @@
 {% extends 'index.html' %}
 {% block content %}
+    {% if not user_info and token %}
+        <script>
+            document.cookie = "mytoken={{ token }}";
+            window.location.href = "/"
+        </script>
+    {% endif %}
+
+    {% if user_info %}
+        <p>{{ user_info.id }}님 환영합니다.</p>
+    {% endif %}
+
+
     <div class="align-center">
         <img src="../static/study%20starter.png">
         <h2 class="font3">코딩입문을 위한 강의리뷰<img src="../static/rtan.png" style="width: 50px;height: 50px"></h2>
     </div>
     <p class="btn-group align-center" style="display: block" role="group" aria-label="Basic outlined example">
-  <button type="button" class="btn btn-outline-dark" onclick="online()">스파르타 온라인 강의</button>
-  <button type="button" class="btn btn-outline-dark" onclick="offline()">오프라인 코딩 학원</button>
+        <button type="button" class="btn btn-outline-dark" onclick="online()">스파르타 온라인 강의</button>
+        <button type="button" class="btn btn-outline-dark" onclick="offline()">오프라인 코딩 학원</button>
 
-</p>
+    </p>
     {# flash 메세지 전달 받으면 alert 띄우기 #}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -29,7 +41,7 @@
                     let currentScroll = $(window).scrollTop() + $(window).height();
                     if (maxHeight <= currentScroll + 100) {
                         showClass(cnt)
-                        if(showClass(cnt) != 'a'){
+                        if (showClass(cnt) != 'a') {
                             cnt++;
                         }
                         console.log(showClass(cnt))

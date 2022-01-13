@@ -71,8 +71,19 @@ def route_map():
 @app.route('/board', methods=['get'])
 def route_board():
     title_receive = request.args.get('title')
-    img_receive = db.classlist.find_one({'title':title_receive})
+    img_receive = db.classlist.find_one({'title': title_receive})
     img_url = img_receive['img_url']
+
+    token_receive = request.cookies.get('mytoken')
+    if token_receive:
+        try:
+            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+            user_info = db.users.find_one({"id": payload["id"]})
+            return render_template('board.html', title=title_receive, img_url=img_url,user_info=user_info)
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for("home", msg="로그인 시간이 만료되었습니다."))
+        except jwt.exceptions.DecodeError:
+            return redirect(url_for("home", msg="로그인 정보가 존재하지 않습니다."))
     return render_template('board.html', title = title_receive,img_url=img_url)
 
 #클릭한 강의리뷰출력
@@ -147,9 +158,6 @@ def route_login():
             if result is not None:
                 payload = {'id': receive_id, 'exp': datetime.utcnow() + timedelta(hours=1)}  # 로그인 1시간 유지
                 token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-                # print(token)
-                # token_decode = jwt.decode(token, SECRET_KEY, 'HS256')
-                # token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
                 return render_template("main.html", token=token)
 
             # 로그인 실패

@@ -54,13 +54,13 @@ function signup() {
 }
 
 function logout() {
-    let date = new Date();
-    date.setDate(date.getDate() - 100);
-    let Cookie = `${name}=;Expires=${date.toUTCString()}`
-    document.cookie = Cookie;
+    deleteCookie('mytoken')
+    alert('로그아웃 완료')
+    window.location.href = "/"
+}
 
-    alert('로그아웃!')
-    window.location.href = "/login"
+function deleteCookie(name) {
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
 function openClose() {
@@ -137,11 +137,12 @@ function deleteReview(id) {
             }
         })
     }
-
 }
 
 function showReview(num) {
     let title = $('#title').text()
+    let login_id = $('#login_id').data('name');
+
     $.ajax({
         type: "GET",
         url: "/readBoard",
@@ -155,27 +156,31 @@ function showReview(num) {
                 let rating_rec = review['rating']
                 let review_rec = review['review']
                 let html = `<div class="row g-3 board_wrap font3">
-    <div class="col-md-6">
-        <p style="width: 200px">아이디 : ${id_rec} </p>
-    </div>
-    <div class="col-md-3">
-        
-        <p  style="width: 100px"> 평점 : ${rating_rec}/5 </p>
-    </div>
-    <div class="col-md-2">
-    <button class="btn btn-outline-dark btn-sm font1" onclick="updateReview('${sec_id}')">수정</button> 
-     &nbsp&nbsp&nbsp
-    <button class="btn btn-outline-dark btn-sm font1" onclick="deleteReview('${sec_id}')">삭제</button>
-    </div>
-    <div class="col-12">
-        <label for="review" class="form-label font1">리뷰</label>
-        <p class="border border-1" > ${review_rec}
-        <p/>
-        
-    </div>
-</div>
-<br>
-                                    `
+                                <div class="col-md-6">
+                                    <p style="width: 200px">아이디 : ${id_rec} </p>
+                                </div>
+                                <div class="col-md-3">
+                                    
+                                    <p  style="width: 100px"> 평점 : ${rating_rec}/5 </p>
+                                </div>
+                            <div class="col-md-2">`
+                if (login_id == id_rec) {
+                    html += `
+                        <button class="btn btn-outline-dark btn-sm font1" onclick="updateReview('${sec_id}')">수정</button> 
+                         &nbsp&nbsp&nbsp
+                        <button class="btn btn-outline-dark btn-sm font1" onclick="deleteReview('${sec_id}')">삭제</button>
+                        `
+                }
+                html += `</div>
+                            <div class="col-12">
+                            <label for="review" class="form-label font1">리뷰</label>
+                            <p class="border border-1" > ${review_rec}
+                            <p/>
+                            </div>
+                        </div>
+                         <br>`
+
+
                 $('#add_review').append(html)
             }
 
