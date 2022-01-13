@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-     <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
@@ -29,10 +29,16 @@
         </button>
         <button role="button" onclick="mypage()">마이페이지
         </button>
-        <button role="button" onclick="login()">로그인
-        </button>
-        <button role="button" onclick="signup()">회원가입
-        </button>
+
+        {% if not user_info %}
+            <button role="button" onclick="login()">로그인
+            </button>
+            <button role="button" onclick="signup()">회원가입
+            </button>
+        {% else %}
+            <button role="button" onclick="logout()">로그아웃
+            </button>
+        {% endif %}
     </div>
 
     {% block content %}
